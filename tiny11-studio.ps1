@@ -1,4 +1,4 @@
-# tiny11-studio.ps1 — Main entry point for tiny11 Studio
+﻿# tiny11-studio.ps1 â€” Main entry point for tiny11 Studio
 # Modular Windows 11 Image Builder GUI
 
 #Requires -Version 5.1
@@ -31,13 +31,17 @@ $script:mountedDrive = $null
 $script:buildRunning = $false
 
 # Build the main XAML window
-$themeXaml = Get-ThemeXaml
 $stepIndicator = Get-StepIndicatorXaml
 $step1 = Get-Step1Xaml
 $step2 = Get-Step2Xaml
 $step3 = Get-Step3Xaml
 $step4 = Get-Step4Xaml
 $submodulePrompt = Get-SubmodulePromptXaml
+
+# Load theme ResourceDictionary separately
+$themeXaml = Get-ThemeXaml
+$themeReader = [System.Xml.XmlReader]::Create([System.IO.StringReader]::new($themeXaml))
+$themeDict = [Windows.Markup.XamlReader]::Load($themeReader)
 
 $windowXaml = @"
 <Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -46,9 +50,6 @@ $windowXaml = @"
         WindowStartupLocation="CenterScreen"
         Background="#1e1e2e" FontFamily="Segoe UI"
         MinWidth="700" MinHeight="550">
-    <Window.Resources>
-        $themeXaml
-    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -91,9 +92,13 @@ $windowXaml = @"
         <Border Grid.Row="3" Background="#181825" Padding="16,10">
             <DockPanel x:Name="navBar">
                 <Button x:Name="btnBack" Content="Back" DockPanel.Dock="Left"
-                        Style="{StaticResource SecondaryButton}" Visibility="Collapsed"/>
+                        Visibility="Collapsed" Background="#313244" Foreground="#cdd6f4"
+                        FontFamily="Segoe UI" FontSize="13" Padding="16,8" Cursor="Hand"
+                        BorderThickness="0"/>
                 <Button x:Name="btnNext" Content="Next" DockPanel.Dock="Right"
-                        Style="{StaticResource PrimaryButton}" HorizontalAlignment="Right"/>
+                        HorizontalAlignment="Right" Background="#89b4fa" Foreground="#1e1e2e"
+                        FontFamily="Segoe UI" FontSize="14" FontWeight="SemiBold"
+                        Padding="20,10" Cursor="Hand" BorderThickness="0"/>
                 <TextBlock Text="" />
             </DockPanel>
         </Border>
@@ -104,6 +109,9 @@ $windowXaml = @"
 # Parse XAML and create window
 $reader = [System.Xml.XmlReader]::Create([System.IO.StringReader]::new($windowXaml))
 $window = [Windows.Markup.XamlReader]::Load($reader)
+
+# Apply theme resources to window
+$window.Resources.MergedDictionaries.Add($themeDict)
 
 # Find all named elements
 $controls = @{}
@@ -131,7 +139,7 @@ foreach ($name in $namedElements) {
     $controls[$name] = $window.FindName($name)
 }
 
-# ─── Helper Functions ───
+# â”€â”€â”€ Helper Functions â”€â”€â”€
 
 function Update-StepIndicator {
     param([int]$Step)
@@ -328,7 +336,7 @@ function Add-LogMessage {
     })
 }
 
-# ─── Card Selection Helpers ───
+# â”€â”€â”€ Card Selection Helpers â”€â”€â”€
 
 function Set-CardSelected {
     param($Card, [string]$AccentColor)
@@ -342,7 +350,7 @@ function Set-CardUnselected {
     $Card.Tag = $null
 }
 
-# ─── Event Wiring ───
+# â”€â”€â”€ Event Wiring â”€â”€â”€
 
 # Language selector
 $languages = Get-AvailableLanguages
@@ -552,7 +560,7 @@ $controls['btnStartBuild'].Add_Click({
 
     Add-LogMessage "Starting tiny11 Studio build..."
     Add-LogMessage "Mode: $($script:buildMode) | Items: $($selectedItems.Count) | Output: $outputPath"
-    Add-LogMessage "─────────────────────────────────────────"
+    Add-LogMessage "-----------------------------------------"
 
     # Run build in background
     $result = Start-Tiny11Build `
@@ -585,12 +593,12 @@ $controls['btnStartBuild'].Add_Click({
         $controls['progressBar'].Value = 100
         $controls['txtPercent'].Text = "100%"
         $controls['btnOpenFolder'].Visibility = "Visible"
-        Add-LogMessage "═══════════════════════════════════════"
+        Add-LogMessage "========================================="
         Add-LogMessage "BUILD COMPLETE! ISO saved to: $($result.OutputPath)"
     } else {
         $controls['txtPhase'].Text = "Build Failed"
         $controls['btnStartBuild'].IsEnabled = $true
-        Add-LogMessage "═══════════════════════════════════════"
+        Add-LogMessage "========================================="
         Add-LogMessage "BUILD FAILED: $($result.Error)"
     }
 })
@@ -628,7 +636,7 @@ $controls['btnUseLocal'].Add_Click({
     }
 })
 
-# ─── Initial State ───
+# â”€â”€â”€ Initial State â”€â”€â”€
 
 # Set default scratch directory
 $controls['txtScratchDir'].Text = $PSScriptRoot
