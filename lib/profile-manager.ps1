@@ -1,4 +1,4 @@
-# profile-manager.ps1 — Save, load, and manage configuration profiles
+﻿# profile-manager.ps1 â€” Save, load, and manage configuration profiles
 # Profiles store user selections as JSON files
 
 function Get-CatalogPath {

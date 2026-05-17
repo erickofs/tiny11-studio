@@ -1,4 +1,4 @@
-# scan-iso.ps1 — ISO analysis and DISM enumeration functions
+﻿# scan-iso.ps1 â€” ISO analysis and DISM enumeration functions
 # Provides functions to mount ISOs, detect editions, and scan installed packages
 
 function Mount-IsoImage {

@@ -1,4 +1,4 @@
-# gui-theme.ps1 — WPF Dark Theme (Catppuccin Mocha inspired)
+﻿# gui-theme.ps1 â€” WPF Dark Theme (Catppuccin Mocha inspired)
 # Returns XAML ResourceDictionary string with all styles
 
 function Get-ThemeXaml {

@@ -1,4 +1,4 @@
-# gui-steps.ps1 — XAML builders for each wizard step
+﻿# gui-steps.ps1 â€” XAML builders for each wizard step
 # Each function returns a XAML string for a wizard panel
 
 function Get-StepIndicatorXaml {
@@ -37,7 +37,7 @@ function Get-StepIndicatorXaml {
 function Get-Step1Xaml {
     <#
     .SYNOPSIS
-        Step 1: Source Configuration — ISO path, edition, scratch, output.
+        Step 1: Source Configuration â€” ISO path, edition, scratch, output.
     #>
     return @'
     <StackPanel x:Name="step1Panel" Margin="20">
@@ -87,7 +87,7 @@ function Get-Step1Xaml {
 function Get-Step2Xaml {
     <#
     .SYNOPSIS
-        Step 2: Build Mode — Regular vs Core selection.
+        Step 2: Build Mode â€” Regular vs Core selection.
     #>
     return @'
     <StackPanel x:Name="step2Panel" Margin="20" Visibility="Collapsed">
@@ -146,7 +146,7 @@ function Get-Step2Xaml {
 function Get-Step3Xaml {
     <#
     .SYNOPSIS
-        Step 3: Installation Type — Standard vs Custom, with category selection panel.
+        Step 3: Installation Type â€” Standard vs Custom, with category selection panel.
     #>
     return @'
     <Grid x:Name="step3Panel" Margin="20" Visibility="Collapsed">
@@ -260,7 +260,7 @@ function Get-Step3Xaml {
 function Get-Step4Xaml {
     <#
     .SYNOPSIS
-        Step 4: Build — Summary, progress, and log output.
+        Step 4: Build â€” Summary, progress, and log output.
     #>
     return @'
     <Grid x:Name="step4Panel" Margin="20" Visibility="Collapsed">

@@ -1,27 +1,23 @@
-﻿# tiny11-studio.ps1 â€” Main entry point for tiny11 Studio
+﻿# tiny11-studio.ps1 - Main entry point for tiny11 Studio
 # Modular Windows 11 Image Builder GUI
 
 #Requires -Version 5.1
 
-# Load WPF assemblies
 Add-Type -AssemblyName PresentationFramework
 Add-Type -AssemblyName PresentationCore
 Add-Type -AssemblyName WindowsBase
 Add-Type -AssemblyName System.Windows.Forms
 
-# Dot-source all library modules
+# Dot-source library modules
 . "$PSScriptRoot\lib\i18n.ps1"
-. "$PSScriptRoot\lib\gui-theme.ps1"
-. "$PSScriptRoot\lib\gui-steps.ps1"
 . "$PSScriptRoot\lib\submodule-manager.ps1"
 . "$PSScriptRoot\lib\scan-iso.ps1"
 . "$PSScriptRoot\lib\build-engine.ps1"
 . "$PSScriptRoot\lib\profile-manager.ps1"
 
-# Initialize localization
 Initialize-Language
 
-# Load catalog
+# State
 $script:catalog = Import-Catalog
 $script:currentStep = 1
 $script:buildMode = "regular"
@@ -30,92 +26,15 @@ $script:selections = @{}
 $script:mountedDrive = $null
 $script:buildRunning = $false
 
-# Build the main XAML window
-$stepIndicator = Get-StepIndicatorXaml
-$step1 = Get-Step1Xaml
-$step2 = Get-Step2Xaml
-$step3 = Get-Step3Xaml
-$step4 = Get-Step4Xaml
-$submodulePrompt = Get-SubmodulePromptXaml
-
-# Load theme ResourceDictionary separately
-$themeXaml = Get-ThemeXaml
-$themeReader = [System.Xml.XmlReader]::Create([System.IO.StringReader]::new($themeXaml))
-$themeDict = [Windows.Markup.XamlReader]::Load($themeReader)
-
-$windowXaml = @"
-<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="tiny11 Studio" Width="820" Height="640"
-        WindowStartupLocation="CenterScreen"
-        Background="#1e1e2e" FontFamily="Segoe UI"
-        MinWidth="700" MinHeight="550">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-
-        <!-- Title Bar -->
-        <Border Grid.Row="0" Background="#181825" Padding="16,10">
-            <DockPanel>
-                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
-                    <ComboBox x:Name="cmbLanguage" Width="100" Background="#313244"
-                              Foreground="#cdd6f4" FontSize="11" BorderThickness="0"/>
-                </StackPanel>
-                <StackPanel>
-                    <TextBlock x:Name="txtTitle" Text="tiny11 Studio" Foreground="#89b4fa"
-                               FontSize="18" FontWeight="Bold"/>
-                    <TextBlock x:Name="txtSubtitle" Text="Modular Windows 11 Image Builder"
-                               Foreground="#a6adc8" FontSize="11"/>
-                </StackPanel>
-            </DockPanel>
-        </Border>
-
-        <!-- Step Indicator -->
-        <Border Grid.Row="1" Padding="0,4">
-            $stepIndicator
-        </Border>
-
-        <!-- Content Area -->
-        <Grid Grid.Row="2">
-            $submodulePrompt
-            $step1
-            $step2
-            $step3
-            $step4
-        </Grid>
-
-        <!-- Navigation Bar -->
-        <Border Grid.Row="3" Background="#181825" Padding="16,10">
-            <DockPanel x:Name="navBar">
-                <Button x:Name="btnBack" Content="Back" DockPanel.Dock="Left"
-                        Visibility="Collapsed" Background="#313244" Foreground="#cdd6f4"
-                        FontFamily="Segoe UI" FontSize="13" Padding="16,8" Cursor="Hand"
-                        BorderThickness="0"/>
-                <Button x:Name="btnNext" Content="Next" DockPanel.Dock="Right"
-                        HorizontalAlignment="Right" Background="#89b4fa" Foreground="#1e1e2e"
-                        FontFamily="Segoe UI" FontSize="14" FontWeight="SemiBold"
-                        Padding="20,10" Cursor="Hand" BorderThickness="0"/>
-                <TextBlock Text="" />
-            </DockPanel>
-        </Border>
-    </Grid>
-</Window>
-"@
-
-# Parse XAML and create window
-$reader = [System.Xml.XmlReader]::Create([System.IO.StringReader]::new($windowXaml))
+# Load XAML from file
+$xamlPath = Join-Path $PSScriptRoot "assets\window.xaml"
+$xamlContent = Get-Content -Raw $xamlPath
+$reader = [System.Xml.XmlReader]::Create([System.IO.StringReader]::new($xamlContent))
 $window = [Windows.Markup.XamlReader]::Load($reader)
 
-# Apply theme resources to window
-$window.Resources.MergedDictionaries.Add($themeDict)
-
-# Find all named elements
-$controls = @{}
-$namedElements = @(
+# Find all named controls
+$c = @{}
+@(
     'txtTitle','txtSubtitle','cmbLanguage',
     'stepDot1','stepDot2','stepDot3','stepDot4',
     'stepLine1','stepLine2','stepLine3',
@@ -133,75 +52,55 @@ $namedElements = @(
     'btnStartBuild','btnCancelBuild','btnOpenFolder',
     'btnCloneGithub','btnUseLocal','txtSubmoduleStatus',
     'btnBack','btnNext','navBar'
-)
+) | ForEach-Object { $c[$_] = $window.FindName($_) }
 
-foreach ($name in $namedElements) {
-    $controls[$name] = $window.FindName($name)
-}
+# --- Helpers ---
 
-# â”€â”€â”€ Helper Functions â”€â”€â”€
+$bc = [System.Windows.Media.BrushConverter]::new()
 
-function Update-StepIndicator {
-    param([int]$Step)
-
-    $dots = @($controls['stepDot1'], $controls['stepDot2'], $controls['stepDot3'], $controls['stepDot4'])
-    $lines = @($controls['stepLine1'], $controls['stepLine2'], $controls['stepLine3'])
-
+function Update-StepIndicator([int]$Step) {
+    $dots = @($c.stepDot1, $c.stepDot2, $c.stepDot3, $c.stepDot4)
+    $lines = @($c.stepLine1, $c.stepLine2, $c.stepLine3)
     for ($i = 0; $i -lt 4; $i++) {
         if ($i -lt $Step) {
-            $dots[$i].Background = [System.Windows.Media.BrushConverter]::new().ConvertFrom("#89b4fa")
-            $dots[$i].Child.Foreground = [System.Windows.Media.BrushConverter]::new().ConvertFrom("#1e1e2e")
+            $dots[$i].Background = $bc.ConvertFrom("#89b4fa")
+            $dots[$i].Child.Foreground = $bc.ConvertFrom("#1e1e2e")
         } else {
-            $dots[$i].Background = [System.Windows.Media.BrushConverter]::new().ConvertFrom("#45475a")
-            $dots[$i].Child.Foreground = [System.Windows.Media.BrushConverter]::new().ConvertFrom("#a6adc8")
+            $dots[$i].Background = $bc.ConvertFrom("#45475a")
+            $dots[$i].Child.Foreground = $bc.ConvertFrom("#a6adc8")
         }
         if ($i -lt 3) {
-            $lines[$i].Background = if ($i -lt ($Step - 1)) {
-                [System.Windows.Media.BrushConverter]::new().ConvertFrom("#89b4fa")
-            } else {
-                [System.Windows.Media.BrushConverter]::new().ConvertFrom("#45475a")
-            }
+            $lines[$i].Background = if ($i -lt ($Step - 1)) { $bc.ConvertFrom("#89b4fa") } else { $bc.ConvertFrom("#45475a") }
         }
     }
 }
 
-function Show-Step {
-    param([int]$Step)
-
+function Show-Step([int]$Step) {
     $script:currentStep = $Step
-
-    $controls['step1Panel'].Visibility = if ($Step -eq 1) { 'Visible' } else { 'Collapsed' }
-    $controls['step2Panel'].Visibility = if ($Step -eq 2) { 'Visible' } else { 'Collapsed' }
-    $controls['step3Panel'].Visibility = if ($Step -eq 3) { 'Visible' } else { 'Collapsed' }
-    $controls['step4Panel'].Visibility = if ($Step -eq 4) { 'Visible' } else { 'Collapsed' }
-    $controls['submodulePanel'].Visibility = 'Collapsed'
-
-    $controls['btnBack'].Visibility = if ($Step -gt 1) { 'Visible' } else { 'Collapsed' }
-    $controls['btnNext'].Visibility = if ($Step -lt 4) { 'Visible' } else { 'Collapsed' }
-
-    Update-StepIndicator -Step $Step
-
-    # Update summary on step 4
-    if ($Step -eq 4) {
-        Update-BuildSummary
-    }
+    $c.step1Panel.Visibility = if ($Step -eq 1) { 'Visible' } else { 'Collapsed' }
+    $c.step2Panel.Visibility = if ($Step -eq 2) { 'Visible' } else { 'Collapsed' }
+    $c.step3Panel.Visibility = if ($Step -eq 3) { 'Visible' } else { 'Collapsed' }
+    $c.step4Panel.Visibility = if ($Step -eq 4) { 'Visible' } else { 'Collapsed' }
+    $c.submodulePanel.Visibility = 'Collapsed'
+    $c.btnBack.Visibility = if ($Step -gt 1) { 'Visible' } else { 'Collapsed' }
+    $c.btnNext.Visibility = if ($Step -lt 4) { 'Visible' } else { 'Collapsed' }
+    Update-StepIndicator $Step
+    if ($Step -eq 4) { Update-BuildSummary }
 }
 
 function Update-BuildSummary {
-    $controls['txtSummarySource'].Text = $controls['txtIsoPath'].Text
-    $controls['txtSummaryOutput'].Text = $controls['txtOutputPath'].Text
-    $controls['txtSummaryMode'].Text = if ($script:buildMode -eq "regular") { "Regular (Serviceable)" } else { "Core (Maximum Reduction)" }
-    $controls['txtSummaryMode'].Foreground = [System.Windows.Media.BrushConverter]::new().ConvertFrom(
-        $(if ($script:buildMode -eq "regular") { "#94e2d5" } else { "#cba6f7" })
-    )
+    $c.txtSummarySource.Text = $c.txtIsoPath.Text
+    $c.txtSummaryOutput.Text = $c.txtOutputPath.Text
+    $c.txtSummaryMode.Text = if ($script:buildMode -eq "regular") { "Regular (Serviceable)" } else { "Core (Maximum Reduction)" }
+    $c.txtSummaryMode.Foreground = $bc.ConvertFrom($(if ($script:buildMode -eq "regular") { "#94e2d5" } else { "#cba6f7" }))
     $removeCount = ($script:selections.Values | Where-Object { $_ -eq $true }).Count
-    $controls['txtSummaryCount'].Text = "$removeCount items"
+    $c.txtSummaryCount.Text = "$removeCount items"
 }
 
 function Initialize-Selections {
     $script:selections = @{}
-    foreach ($category in $script:catalog.categories) {
-        foreach ($item in $category.items) {
+    foreach ($cat in $script:catalog.categories) {
+        foreach ($item in $cat.items) {
             if ($item.mode -eq "core_only" -and $script:buildMode -ne "core") { continue }
             $script:selections[$item.id] = [bool]$item.default_remove
         }
@@ -209,45 +108,32 @@ function Initialize-Selections {
 }
 
 function Build-CategoryList {
-    $controls['lstCategories'].Items.Clear()
-    foreach ($category in $script:catalog.categories) {
-        if ($category.items.Count -eq 0) { continue }
-        $hasVisibleItems = $false
-        foreach ($item in $category.items) {
-            if ($item.mode -ne "core_only" -or $script:buildMode -eq "core") {
-                $hasVisibleItems = $true
-                break
-            }
+    $c.lstCategories.Items.Clear()
+    foreach ($cat in $script:catalog.categories) {
+        $hasVisible = $false
+        foreach ($item in $cat.items) {
+            if ($item.mode -ne "core_only" -or $script:buildMode -eq "core") { $hasVisible = $true; break }
         }
-        if (-not $hasVisibleItems) { continue }
-
+        if (-not $hasVisible) { continue }
         $li = New-Object System.Windows.Controls.ListBoxItem
-        $li.Content = "$($category.icon) $($category.name)"
-        $li.Tag = $category.id
-        $li.Foreground = [System.Windows.Media.BrushConverter]::new().ConvertFrom("#cdd6f4")
-        $li.FontFamily = [System.Windows.Media.FontFamily]::new("Segoe UI")
+        $li.Content = "$($cat.icon) $($cat.name)"
+        $li.Tag = $cat.id
+        $li.Foreground = $bc.ConvertFrom("#cdd6f4")
         $li.Padding = [System.Windows.Thickness]::new(8, 6, 8, 6)
-        $controls['lstCategories'].Items.Add($li)
+        $c.lstCategories.Items.Add($li) | Out-Null
     }
-
-    # Select first category
-    if ($controls['lstCategories'].Items.Count -gt 0) {
-        $controls['lstCategories'].SelectedIndex = 0
-    }
+    if ($c.lstCategories.Items.Count -gt 0) { $c.lstCategories.SelectedIndex = 0 }
 }
 
-function Build-ItemsForCategory {
-    param([string]$CategoryId)
+function Build-ItemsForCategory([string]$CategoryId) {
+    $c.pnlItems.Children.Clear()
+    $search = $c.txtSearch.Text.ToLower()
+    $cat = $script:catalog.categories | Where-Object { $_.id -eq $CategoryId }
+    if (-not $cat) { return }
 
-    $controls['pnlItems'].Children.Clear()
-    $searchText = $controls['txtSearch'].Text.ToLower()
-
-    $category = $script:catalog.categories | Where-Object { $_.id -eq $CategoryId }
-    if (-not $category) { return }
-
-    foreach ($item in $category.items) {
+    foreach ($item in $cat.items) {
         if ($item.mode -eq "core_only" -and $script:buildMode -ne "core") { continue }
-        if ($searchText -and $item.name.ToLower() -notlike "*$searchText*" -and $item.description.ToLower() -notlike "*$searchText*") { continue }
+        if ($search -and $item.name.ToLower() -notlike "*$search*" -and $item.description.ToLower() -notlike "*$search*") { continue }
 
         $panel = New-Object System.Windows.Controls.StackPanel
         $panel.Orientation = "Horizontal"
@@ -258,404 +144,155 @@ function Build-ItemsForCategory {
         $cb.Tag = $item.id
         $cb.Margin = [System.Windows.Thickness]::new(0, 0, 8, 0)
         $cb.VerticalAlignment = "Center"
+        $cb.Add_Checked({ $script:selections[$this.Tag] = $true; Update-ItemCount })
+        $cb.Add_Unchecked({ $script:selections[$this.Tag] = $false; Update-ItemCount })
 
-        $cb.Add_Checked({
-            $id = $this.Tag
-            $script:selections[$id] = $true
-            Update-ItemCount
-        })
-        $cb.Add_Unchecked({
-            $id = $this.Tag
-            $script:selections[$id] = $false
-            Update-ItemCount
-        })
+        $nm = New-Object System.Windows.Controls.TextBlock
+        $nm.Text = $item.name; $nm.Foreground = $bc.ConvertFrom("#cdd6f4"); $nm.FontSize = 13
+        $nm.VerticalAlignment = "Center"; $nm.Margin = [System.Windows.Thickness]::new(0,0,8,0)
 
-        $nameBlock = New-Object System.Windows.Controls.TextBlock
-        $nameBlock.Text = $item.name
-        $nameBlock.Foreground = [System.Windows.Media.BrushConverter]::new().ConvertFrom("#cdd6f4")
-        $nameBlock.FontFamily = [System.Windows.Media.FontFamily]::new("Segoe UI")
-        $nameBlock.FontSize = 13
-        $nameBlock.VerticalAlignment = "Center"
-        $nameBlock.Margin = [System.Windows.Thickness]::new(0, 0, 8, 0)
+        $desc = New-Object System.Windows.Controls.TextBlock
+        $desc.Text = "- $($item.description)"; $desc.Foreground = $bc.ConvertFrom("#a6adc8"); $desc.FontSize = 11
+        $desc.VerticalAlignment = "Center"; $desc.Margin = [System.Windows.Thickness]::new(0,0,8,0)
 
-        $descBlock = New-Object System.Windows.Controls.TextBlock
-        $descBlock.Text = "- $($item.description)"
-        $descBlock.Foreground = [System.Windows.Media.BrushConverter]::new().ConvertFrom("#a6adc8")
-        $descBlock.FontFamily = [System.Windows.Media.FontFamily]::new("Segoe UI")
-        $descBlock.FontSize = 11
-        $descBlock.VerticalAlignment = "Center"
-        $descBlock.Margin = [System.Windows.Thickness]::new(0, 0, 8, 0)
-
-        # Risk badge
         $badge = New-Object System.Windows.Controls.Border
         $badge.CornerRadius = [System.Windows.CornerRadius]::new(4)
         $badge.Padding = [System.Windows.Thickness]::new(6, 2, 6, 2)
         $badge.VerticalAlignment = "Center"
-        $badgeText = New-Object System.Windows.Controls.TextBlock
-        $badgeText.FontSize = 10
-        $badgeText.FontFamily = [System.Windows.Media.FontFamily]::new("Segoe UI")
-
+        $bt = New-Object System.Windows.Controls.TextBlock; $bt.FontSize = 10
         switch ($item.risk) {
-            "safe" {
-                $badge.Background = [System.Windows.Media.BrushConverter]::new().ConvertFrom("#2d4a2d")
-                $badgeText.Foreground = [System.Windows.Media.BrushConverter]::new().ConvertFrom("#a6e3a1")
-                $badgeText.Text = "Safe"
-            }
-            "moderate" {
-                $badge.Background = [System.Windows.Media.BrushConverter]::new().ConvertFrom("#4a4a2d")
-                $badgeText.Foreground = [System.Windows.Media.BrushConverter]::new().ConvertFrom("#f9e2af")
-                $badgeText.Text = "Moderate"
-            }
-            "dangerous" {
-                $badge.Background = [System.Windows.Media.BrushConverter]::new().ConvertFrom("#4a2d2d")
-                $badgeText.Foreground = [System.Windows.Media.BrushConverter]::new().ConvertFrom("#f38ba8")
-                $badgeText.Text = "Dangerous"
-            }
+            "safe"      { $badge.Background = $bc.ConvertFrom("#2d4a2d"); $bt.Foreground = $bc.ConvertFrom("#a6e3a1"); $bt.Text = "Safe" }
+            "moderate"  { $badge.Background = $bc.ConvertFrom("#4a4a2d"); $bt.Foreground = $bc.ConvertFrom("#f9e2af"); $bt.Text = "Moderate" }
+            "dangerous" { $badge.Background = $bc.ConvertFrom("#4a2d2d"); $bt.Foreground = $bc.ConvertFrom("#f38ba8"); $bt.Text = "Dangerous" }
         }
-        $badge.Child = $badgeText
+        $badge.Child = $bt
 
-        $panel.Children.Add($cb)
-        $panel.Children.Add($nameBlock)
-        $panel.Children.Add($descBlock)
-        $panel.Children.Add($badge)
-        $controls['pnlItems'].Children.Add($panel)
+        $panel.Children.Add($cb) | Out-Null
+        $panel.Children.Add($nm) | Out-Null
+        $panel.Children.Add($desc) | Out-Null
+        $panel.Children.Add($badge) | Out-Null
+        $c.pnlItems.Children.Add($panel) | Out-Null
     }
 }
 
 function Update-ItemCount {
-    $removeCount = ($script:selections.Values | Where-Object { $_ -eq $true }).Count
-    $totalCount = $script:selections.Count
-    $controls['txtItemCount'].Text = "$removeCount of $totalCount items selected for removal"
+    $rem = ($script:selections.Values | Where-Object { $_ }).Count
+    $c.txtItemCount.Text = "$rem of $($script:selections.Count) items selected for removal"
 }
 
-function Add-LogMessage {
-    param([string]$Message)
-    $controls['txtLog'].Dispatcher.Invoke([action]{
-        $controls['txtLog'].AppendText("$Message`r`n")
-        $controls['txtLog'].ScrollToEnd()
-    })
+function Add-Log([string]$msg) {
+    $c.txtLog.Dispatcher.Invoke([action]{ $c.txtLog.AppendText("$msg`r`n"); $c.txtLog.ScrollToEnd() })
 }
 
-# â”€â”€â”€ Card Selection Helpers â”€â”€â”€
-
-function Set-CardSelected {
-    param($Card, [string]$AccentColor)
-    $Card.BorderBrush = [System.Windows.Media.BrushConverter]::new().ConvertFrom($AccentColor)
-    $Card.Tag = "selected"
-}
-
-function Set-CardUnselected {
-    param($Card)
-    $Card.BorderBrush = [System.Windows.Media.Brushes]::Transparent
-    $Card.Tag = $null
-}
-
-# â”€â”€â”€ Event Wiring â”€â”€â”€
-
-# Language selector
+# --- Language ---
 $languages = Get-AvailableLanguages
-foreach ($lang in $languages) {
-    $controls['cmbLanguage'].Items.Add($lang.Name) | Out-Null
-}
-$currentLang = Get-CurrentLanguage
-$langIndex = switch ($currentLang) { "en" { 0 } "pt-br" { 1 } "es" { 2 } default { 0 } }
-if ($langIndex -lt $controls['cmbLanguage'].Items.Count) {
-    $controls['cmbLanguage'].SelectedIndex = $langIndex
-}
+foreach ($lang in $languages) { $c.cmbLanguage.Items.Add($lang.Name) | Out-Null }
+$li = switch (Get-CurrentLanguage) { "en" { 0 } "pt-br" { 1 } "es" { 2 } default { 0 } }
+if ($li -lt $c.cmbLanguage.Items.Count) { $c.cmbLanguage.SelectedIndex = $li }
 
-# Navigation buttons
-$controls['btnNext'].Add_Click({
+# --- Navigation ---
+$c.btnNext.Add_Click({
     if ($script:currentStep -lt 4) {
-        if ($script:currentStep -eq 1) {
-            if (-not $controls['txtIsoPath'].Text -or $controls['txtIsoPath'].Text -eq "Select a Windows 11 ISO file...") {
-                [System.Windows.MessageBox]::Show("Please select a Windows 11 ISO file.", "tiny11 Studio", "OK", "Warning")
-                return
-            }
+        if ($script:currentStep -eq 1 -and (-not $c.txtIsoPath.Text -or $c.txtIsoPath.Text -eq "Select a Windows 11 ISO file...")) {
+            [System.Windows.MessageBox]::Show("Please select a Windows 11 ISO file.", "tiny11 Studio", "OK", "Warning"); return
         }
-        if ($script:currentStep -eq 2) {
-            Initialize-Selections
-            Build-CategoryList
-        }
+        if ($script:currentStep -eq 2) { Initialize-Selections; Build-CategoryList }
         Show-Step ($script:currentStep + 1)
     }
 })
+$c.btnBack.Add_Click({ if ($script:currentStep -gt 1) { Show-Step ($script:currentStep - 1) } })
 
-$controls['btnBack'].Add_Click({
-    if ($script:currentStep -gt 1) {
-        Show-Step ($script:currentStep - 1)
-    }
-})
-
-# Step 1: Browse buttons
-$controls['btnBrowseIso'].Add_Click({
+# --- Step 1: Browse ---
+$c.btnBrowseIso.Add_Click({
     $dlg = New-Object System.Windows.Forms.OpenFileDialog
     $dlg.Filter = "ISO Files (*.iso)|*.iso|All Files (*.*)|*.*"
     $dlg.Title = "Select Windows 11 ISO"
     if ($dlg.ShowDialog() -eq "OK") {
-        $controls['txtIsoPath'].Text = $dlg.FileName
-
-        # Mount ISO and populate editions
-        $controls['cmbEdition'].Items.Clear()
-        $controls['cmbEdition'].IsEnabled = $false
-
+        $c.txtIsoPath.Text = $dlg.FileName
+        $c.cmbEdition.Items.Clear(); $c.cmbEdition.IsEnabled = $false
         try {
             $drive = Mount-IsoImage -Path $dlg.FileName
             if ($drive) {
                 $script:mountedDrive = $drive
                 $editions = Get-IsoEditions -DriveLetter $drive
-                foreach ($ed in $editions) {
-                    $controls['cmbEdition'].Items.Add("$($ed.Index): $($ed.Name)") | Out-Null
-                }
-                if ($controls['cmbEdition'].Items.Count -gt 0) {
-                    $controls['cmbEdition'].SelectedIndex = 0
-                    $controls['cmbEdition'].IsEnabled = $true
-                }
+                foreach ($ed in $editions) { $c.cmbEdition.Items.Add("$($ed.Index): $($ed.Name)") | Out-Null }
+                if ($c.cmbEdition.Items.Count -gt 0) { $c.cmbEdition.SelectedIndex = 0; $c.cmbEdition.IsEnabled = $true }
             }
-        } catch {
-            [System.Windows.MessageBox]::Show("Failed to mount ISO: $_", "Error", "OK", "Error")
-        }
+        } catch { [System.Windows.MessageBox]::Show("Failed to mount ISO: $_", "Error", "OK", "Error") }
     }
 })
-
-$controls['btnBrowseScratch'].Add_Click({
-    $dlg = New-Object System.Windows.Forms.FolderBrowserDialog
-    $dlg.Description = "Select scratch directory"
-    if ($dlg.ShowDialog() -eq "OK") {
-        $controls['txtScratchDir'].Text = $dlg.SelectedPath
-    }
+$c.btnBrowseScratch.Add_Click({
+    $dlg = New-Object System.Windows.Forms.FolderBrowserDialog; $dlg.Description = "Select scratch directory"
+    if ($dlg.ShowDialog() -eq "OK") { $c.txtScratchDir.Text = $dlg.SelectedPath }
+})
+$c.btnBrowseOutput.Add_Click({
+    $dlg = New-Object System.Windows.Forms.SaveFileDialog; $dlg.Filter = "ISO Files (*.iso)|*.iso"; $dlg.FileName = "tiny11.iso"
+    if ($dlg.ShowDialog() -eq "OK") { $c.txtOutputPath.Text = $dlg.FileName }
 })
 
-$controls['btnBrowseOutput'].Add_Click({
-    $dlg = New-Object System.Windows.Forms.SaveFileDialog
-    $dlg.Filter = "ISO Files (*.iso)|*.iso"
-    $dlg.FileName = "tiny11.iso"
-    $dlg.Title = "Save output ISO"
-    if ($dlg.ShowDialog() -eq "OK") {
-        $controls['txtOutputPath'].Text = $dlg.FileName
-    }
-})
+# --- Step 2: Mode ---
+$c.cardRegular.Add_MouseLeftButtonDown({ $c.cardRegular.BorderBrush = $bc.ConvertFrom("#94e2d5"); $c.cardCore.BorderBrush = [System.Windows.Media.Brushes]::Transparent; $script:buildMode = "regular" })
+$c.cardCore.Add_MouseLeftButtonDown({ $c.cardCore.BorderBrush = $bc.ConvertFrom("#cba6f7"); $c.cardRegular.BorderBrush = [System.Windows.Media.Brushes]::Transparent; $script:buildMode = "core" })
 
-# Step 2: Mode selection
-$controls['cardRegular'].Add_MouseLeftButtonDown({
-    Set-CardSelected $controls['cardRegular'] "#94e2d5"
-    Set-CardUnselected $controls['cardCore']
-    $script:buildMode = "regular"
-})
+# --- Step 3: Install Type ---
+$c.cardStandard.Add_MouseLeftButtonDown({ $c.cardStandard.BorderBrush = $bc.ConvertFrom("#89b4fa"); $c.cardCustom.BorderBrush = [System.Windows.Media.Brushes]::Transparent; $c.customPanel.Visibility = "Collapsed"; $script:installType = "standard" })
+$c.cardCustom.Add_MouseLeftButtonDown({ $c.cardCustom.BorderBrush = $bc.ConvertFrom("#89b4fa"); $c.cardStandard.BorderBrush = [System.Windows.Media.Brushes]::Transparent; $c.customPanel.Visibility = "Visible"; $script:installType = "custom"; Update-ItemCount })
 
-$controls['cardCore'].Add_MouseLeftButtonDown({
-    Set-CardSelected $controls['cardCore'] "#cba6f7"
-    Set-CardUnselected $controls['cardRegular']
-    $script:buildMode = "core"
-})
+$c.lstCategories.Add_SelectionChanged({ $sel = $c.lstCategories.SelectedItem; if ($sel) { Build-ItemsForCategory $sel.Tag } })
+$c.txtSearch.Add_TextChanged({ $sel = $c.lstCategories.SelectedItem; if ($sel) { Build-ItemsForCategory $sel.Tag } })
 
-# Step 3: Install type selection
-$controls['cardStandard'].Add_MouseLeftButtonDown({
-    Set-CardSelected $controls['cardStandard'] "#89b4fa"
-    Set-CardUnselected $controls['cardCustom']
-    $controls['customPanel'].Visibility = "Collapsed"
-    $script:installType = "standard"
-})
+$c.btnSelectAll.Add_Click({ foreach ($k in @($script:selections.Keys)) { $script:selections[$k] = $true }; $sel = $c.lstCategories.SelectedItem; if ($sel) { Build-ItemsForCategory $sel.Tag }; Update-ItemCount })
+$c.btnDeselectAll.Add_Click({ foreach ($k in @($script:selections.Keys)) { $script:selections[$k] = $false }; $sel = $c.lstCategories.SelectedItem; if ($sel) { Build-ItemsForCategory $sel.Tag }; Update-ItemCount })
 
-$controls['cardCustom'].Add_MouseLeftButtonDown({
-    Set-CardSelected $controls['cardCustom'] "#89b4fa"
-    Set-CardUnselected $controls['cardStandard']
-    $controls['customPanel'].Visibility = "Visible"
-    $script:installType = "custom"
-    Update-ItemCount
-})
-
-# Category list selection changed
-$controls['lstCategories'].Add_SelectionChanged({
-    $selected = $controls['lstCategories'].SelectedItem
-    if ($selected) {
-        Build-ItemsForCategory -CategoryId $selected.Tag
-    }
-})
-
-# Search filter
-$controls['txtSearch'].Add_TextChanged({
-    $selected = $controls['lstCategories'].SelectedItem
-    if ($selected) {
-        Build-ItemsForCategory -CategoryId $selected.Tag
-    }
-})
-
-# Select All / Deselect All
-$controls['btnSelectAll'].Add_Click({
-    foreach ($key in @($script:selections.Keys)) {
-        $script:selections[$key] = $true
-    }
-    $selected = $controls['lstCategories'].SelectedItem
-    if ($selected) { Build-ItemsForCategory -CategoryId $selected.Tag }
-    Update-ItemCount
-})
-
-$controls['btnDeselectAll'].Add_Click({
-    foreach ($key in @($script:selections.Keys)) {
-        $script:selections[$key] = $false
-    }
-    $selected = $controls['lstCategories'].SelectedItem
-    if ($selected) { Build-ItemsForCategory -CategoryId $selected.Tag }
-    Update-ItemCount
-})
-
-# Load / Save Profile
-$controls['btnLoadProfile'].Add_Click({
-    $dlg = New-Object System.Windows.Forms.OpenFileDialog
-    $dlg.Filter = "JSON Profile (*.json)|*.json"
+$c.btnLoadProfile.Add_Click({
+    $dlg = New-Object System.Windows.Forms.OpenFileDialog; $dlg.Filter = "JSON Profile (*.json)|*.json"
     $dlg.InitialDirectory = Join-Path $PSScriptRoot "profiles"
     if ($dlg.ShowDialog() -eq "OK") {
-        $profile = Import-Profile -Path $dlg.FileName
-        if ($profile) {
-            $merged = Merge-ProfileWithCatalog -Profile $profile -Catalog $script:catalog -BuildMode $script:buildMode
-            $script:selections = $merged
-            $selected = $controls['lstCategories'].SelectedItem
-            if ($selected) { Build-ItemsForCategory -CategoryId $selected.Tag }
-            Update-ItemCount
-        }
+        $p = Import-Profile -Path $dlg.FileName
+        if ($p) { $script:selections = Merge-ProfileWithCatalog -Profile $p -Catalog $script:catalog -BuildMode $script:buildMode; $sel = $c.lstCategories.SelectedItem; if ($sel) { Build-ItemsForCategory $sel.Tag }; Update-ItemCount }
     }
 })
-
-$controls['btnSaveProfile'].Add_Click({
-    $dlg = New-Object System.Windows.Forms.SaveFileDialog
-    $dlg.Filter = "JSON Profile (*.json)|*.json"
+$c.btnSaveProfile.Add_Click({
+    $dlg = New-Object System.Windows.Forms.SaveFileDialog; $dlg.Filter = "JSON Profile (*.json)|*.json"
     $dlg.InitialDirectory = Join-Path $PSScriptRoot "profiles"
-    if ($dlg.ShowDialog() -eq "OK") {
-        Save-Profile -Name (Split-Path $dlg.FileName -LeafBase) -Mode $script:buildMode -Selections $script:selections -Path $dlg.FileName
-        [System.Windows.MessageBox]::Show("Profile saved!", "tiny11 Studio", "OK", "Information")
-    }
+    if ($dlg.ShowDialog() -eq "OK") { Save-Profile -Name (Split-Path $dlg.FileName -LeafBase) -Mode $script:buildMode -Selections $script:selections -Path $dlg.FileName; [System.Windows.MessageBox]::Show("Profile saved!", "tiny11 Studio", "OK", "Information") }
 })
 
-# Step 4: Build button
-$controls['btnStartBuild'].Add_Click({
+# --- Step 4: Build ---
+$c.btnStartBuild.Add_Click({
     if ($script:buildRunning) { return }
-    $script:buildRunning = $true
-    $controls['btnStartBuild'].IsEnabled = $false
-    $controls['btnCancelBuild'].IsEnabled = $true
-    $controls['btnBack'].IsEnabled = $false
-    $controls['txtLog'].Text = ""
-
-    # Gather selected items from catalog
+    $script:buildRunning = $true; $c.btnStartBuild.IsEnabled = $false; $c.btnCancelBuild.IsEnabled = $true; $c.btnBack.IsEnabled = $false; $c.txtLog.Text = ""
     $selectedItems = @()
-    foreach ($category in $script:catalog.categories) {
-        foreach ($item in $category.items) {
-            if ($script:selections.ContainsKey($item.id) -and $script:selections[$item.id]) {
-                $selectedItems += $item
-            }
-        }
-    }
+    foreach ($cat in $script:catalog.categories) { foreach ($item in $cat.items) { if ($script:selections.ContainsKey($item.id) -and $script:selections[$item.id]) { $selectedItems += $item } } }
+    $edText = $c.cmbEdition.SelectedItem; $edIdx = 1; if ($edText -match '^(\d+):') { $edIdx = [int]$Matches[1] }
+    $scratch = $c.txtScratchDir.Text; if (-not $scratch) { $scratch = $PSScriptRoot }
+    $out = $c.txtOutputPath.Text; if (-not [System.IO.Path]::IsPathRooted($out)) { $out = Join-Path $PSScriptRoot $out }
 
-    # Get edition index from combobox
-    $editionText = $controls['cmbEdition'].SelectedItem
-    $editionIndex = 1
-    if ($editionText -match '^(\d+):') { $editionIndex = [int]$Matches[1] }
+    Add-Log "Starting tiny11 Studio build..."
+    Add-Log "Mode: $($script:buildMode) | Items: $($selectedItems.Count) | Output: $out"
 
-    $scratchDir = $controls['txtScratchDir'].Text
-    if (-not $scratchDir) { $scratchDir = $PSScriptRoot }
+    $result = Start-Tiny11Build -SourceDrive $script:mountedDrive -EditionIndex $edIdx -SelectedItems $selectedItems -OutputPath $out -ScratchDir $scratch -BuildMode $script:buildMode `
+        -OnProgress { param($phase,$step,$total,$msg); $c.progressBar.Dispatcher.Invoke([action]{ $pct = [math]::Round(($step/$total)*100); $c.progressBar.Value = $pct; $c.txtPercent.Text = "$pct%"; $c.txtPhase.Text = $msg }) } `
+        -OnLog { param($msg); Add-Log $msg }
 
-    $outputPath = $controls['txtOutputPath'].Text
-    if (-not [System.IO.Path]::IsPathRooted($outputPath)) {
-        $outputPath = Join-Path $PSScriptRoot $outputPath
-    }
-
-    Add-LogMessage "Starting tiny11 Studio build..."
-    Add-LogMessage "Mode: $($script:buildMode) | Items: $($selectedItems.Count) | Output: $outputPath"
-    Add-LogMessage "-----------------------------------------"
-
-    # Run build in background
-    $result = Start-Tiny11Build `
-        -SourceDrive $script:mountedDrive `
-        -EditionIndex $editionIndex `
-        -SelectedItems $selectedItems `
-        -OutputPath $outputPath `
-        -ScratchDir $scratchDir `
-        -BuildMode $script:buildMode `
-        -OnProgress {
-            param($phase, $step, $total, $msg)
-            $controls['progressBar'].Dispatcher.Invoke([action]{
-                $pct = [math]::Round(($step / $total) * 100)
-                $controls['progressBar'].Value = $pct
-                $controls['txtPercent'].Text = "$pct%"
-                $controls['txtPhase'].Text = $msg
-            })
-        } `
-        -OnLog {
-            param($msg)
-            Add-LogMessage $msg
-        }
-
-    $script:buildRunning = $false
-    $controls['btnCancelBuild'].IsEnabled = $false
-    $controls['btnBack'].IsEnabled = $true
-
-    if ($result.Success) {
-        $controls['txtPhase'].Text = "Build Complete!"
-        $controls['progressBar'].Value = 100
-        $controls['txtPercent'].Text = "100%"
-        $controls['btnOpenFolder'].Visibility = "Visible"
-        Add-LogMessage "========================================="
-        Add-LogMessage "BUILD COMPLETE! ISO saved to: $($result.OutputPath)"
-    } else {
-        $controls['txtPhase'].Text = "Build Failed"
-        $controls['btnStartBuild'].IsEnabled = $true
-        Add-LogMessage "========================================="
-        Add-LogMessage "BUILD FAILED: $($result.Error)"
-    }
+    $script:buildRunning = $false; $c.btnCancelBuild.IsEnabled = $false; $c.btnBack.IsEnabled = $true
+    if ($result.Success) { $c.txtPhase.Text = "Build Complete!"; $c.progressBar.Value = 100; $c.txtPercent.Text = "100%"; $c.btnOpenFolder.Visibility = "Visible"; Add-Log "BUILD COMPLETE! ISO: $($result.OutputPath)" }
+    else { $c.txtPhase.Text = "Build Failed"; $c.btnStartBuild.IsEnabled = $true; Add-Log "BUILD FAILED: $($result.Error)" }
 })
 
-$controls['btnOpenFolder'].Add_Click({
-    $outputDir = Split-Path $controls['txtOutputPath'].Text -Parent
-    if (-not $outputDir) { $outputDir = $PSScriptRoot }
-    Start-Process explorer.exe $outputDir
+$c.btnOpenFolder.Add_Click({ $d = Split-Path $c.txtOutputPath.Text -Parent; if (-not $d) { $d = $PSScriptRoot }; Start-Process explorer.exe $d })
+
+# --- Submodule ---
+$c.btnCloneGithub.Add_Click({ $c.txtSubmoduleStatus.Text = "Cloning..."; $ok = Initialize-SubmoduleFromGit; if ($ok) { $c.submodulePanel.Visibility = "Collapsed"; $c.navBar.Visibility = "Visible"; Show-Step 1 } else { $c.txtSubmoduleStatus.Text = "Clone failed." } })
+$c.btnUseLocal.Add_Click({
+    $dlg = New-Object System.Windows.Forms.FolderBrowserDialog; $dlg.Description = "Select tiny11builder folder"
+    if ($dlg.ShowDialog() -eq "OK") { $c.txtSubmoduleStatus.Text = "Copying..."; $ok = Copy-LocalScripts -SourcePath $dlg.SelectedPath; if ($ok) { $c.submodulePanel.Visibility = "Collapsed"; $c.navBar.Visibility = "Visible"; Show-Step 1 } else { $c.txtSubmoduleStatus.Text = "Copy failed." } }
 })
 
-# Submodule prompt buttons
-$controls['btnCloneGithub'].Add_Click({
-    $controls['txtSubmoduleStatus'].Text = "Cloning from GitHub..."
-    $success = Initialize-SubmoduleFromGit
-    if ($success) {
-        $controls['submodulePanel'].Visibility = "Collapsed"
-        Show-Step 1
-    } else {
-        $controls['txtSubmoduleStatus'].Text = "Clone failed. Check your internet connection."
-    }
-})
+# --- Init ---
+$c.txtScratchDir.Text = $PSScriptRoot
+if (Test-SubmodulePresent) { $c.submodulePanel.Visibility = "Collapsed"; Show-Step 1 }
+else { $c.step1Panel.Visibility = "Collapsed"; $c.submodulePanel.Visibility = "Visible"; $c.btnNext.IsEnabled = $false; $c.navBar.Visibility = "Collapsed" }
 
-$controls['btnUseLocal'].Add_Click({
-    $dlg = New-Object System.Windows.Forms.FolderBrowserDialog
-    $dlg.Description = "Select your tiny11builder folder"
-    if ($dlg.ShowDialog() -eq "OK") {
-        $controls['txtSubmoduleStatus'].Text = "Copying scripts..."
-        $success = Copy-LocalScripts -SourcePath $dlg.SelectedPath
-        if ($success) {
-            $controls['submodulePanel'].Visibility = "Collapsed"
-            Show-Step 1
-        } else {
-            $controls['txtSubmoduleStatus'].Text = "Copy failed. Check the folder path."
-        }
-    }
-})
-
-# â”€â”€â”€ Initial State â”€â”€â”€
-
-# Set default scratch directory
-$controls['txtScratchDir'].Text = $PSScriptRoot
-
-# Check if scripts are present
-if (Test-SubmodulePresent) {
-    $controls['submodulePanel'].Visibility = "Collapsed"
-    Show-Step 1
-} else {
-    $controls['step1Panel'].Visibility = "Collapsed"
-    $controls['submodulePanel'].Visibility = "Visible"
-    $controls['btnNext'].IsEnabled = $false
-    $controls['navBar'].Visibility = "Collapsed"
-}
-
-# Show window
 $window.ShowDialog() | Out-Null
-
-# Cleanup: dismount ISO if still mounted
-if ($script:mountedDrive) {
-    try { Dismount-IsoImage -DriveLetter $script:mountedDrive } catch {}
-}
+if ($script:mountedDrive) { try { Dismount-IsoImage -DriveLetter $script:mountedDrive } catch {} }

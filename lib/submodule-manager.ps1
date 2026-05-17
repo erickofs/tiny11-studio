@@ -1,4 +1,4 @@
-# submodule-manager.ps1 — Manages tiny11builder upstream scripts
+﻿# submodule-manager.ps1 â€” Manages tiny11builder upstream scripts
 # Handles first-run detection, cloning, local copy, and updates
 
 function Get-ScriptsPath {

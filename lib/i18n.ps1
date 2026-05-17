@@ -1,4 +1,4 @@
-# i18n.ps1 — Lightweight localization system for tiny11-studio
+﻿# i18n.ps1 â€” Lightweight localization system for tiny11-studio
 # Loads language strings from JSON files and provides Get-String function
 
 $script:CurrentLanguage = $null
