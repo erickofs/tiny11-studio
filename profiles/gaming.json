@@ -1,0 +1,18 @@
+{
+  "name": "Gaming",
+  "description": "Keep Xbox and gaming features, remove office and productivity bloat",
+  "author": "erickofs",
+  "version": "1.0.0",
+  "mode": "regular",
+  "selections": {
+    "gaming_app": false,
+    "xbox_tcui": false,
+    "xbox_app": false,
+    "xbox_overlay": false,
+    "xbox_gaming_overlay": false,
+    "xbox_identity": false,
+    "xbox_speech": false,
+    "zune_music": false,
+    "zune_video": false
+  }
+}

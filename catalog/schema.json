@@ -1,0 +1,96 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "tiny11-studio Catalog",
+  "description": "Schema for the tiny11-studio removal catalog",
+  "type": "object",
+  "required": ["version", "categories"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "categories": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/category"
+      }
+    }
+  },
+  "definitions": {
+    "category": {
+      "type": "object",
+      "required": ["id", "name", "icon", "description", "items"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z_]+$" },
+        "name": { "type": "string" },
+        "icon": { "type": "string" },
+        "description": { "type": "string" },
+        "items": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/catalogItem" }
+        }
+      }
+    },
+    "catalogItem": {
+      "type": "object",
+      "required": ["id", "name", "description", "type", "risk", "reversible", "default_remove", "mode"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9_]+$" },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "type": {
+          "type": "string",
+          "enum": ["appx", "files", "registry", "service", "scheduled_task", "capability", "package", "composite"]
+        },
+        "package": { "type": "string" },
+        "paths": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "operations": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/registryOperation" }
+        },
+        "risk": {
+          "type": "string",
+          "enum": ["safe", "moderate", "dangerous"]
+        },
+        "reversible": { "type": "boolean" },
+        "default_remove": { "type": "boolean" },
+        "mode": {
+          "type": "string",
+          "enum": ["both", "core_only"]
+        },
+        "dependencies": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "notes": { "type": "string" },
+        "components": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/catalogItem" },
+          "description": "Sub-items for composite type"
+        }
+      }
+    },
+    "registryOperation": {
+      "type": "object",
+      "required": ["hive", "path", "name", "value", "type"],
+      "properties": {
+        "hive": { "type": "string" },
+        "path": { "type": "string" },
+        "name": { "type": "string" },
+        "value": {},
+        "type": {
+          "type": "string",
+          "enum": ["REG_DWORD", "REG_SZ", "REG_DELETE"]
+        },
+        "action": {
+          "type": "string",
+          "enum": ["add", "delete"],
+          "default": "add"
+        }
+      }
+    }
+  }
+}

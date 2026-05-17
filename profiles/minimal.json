@@ -1,0 +1,8 @@
+{
+  "name": "Minimal",
+  "description": "Remove as much as possible while keeping the system serviceable",
+  "author": "erickofs",
+  "version": "1.0.0",
+  "mode": "regular",
+  "selections": {}
+}

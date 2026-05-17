@@ -1,0 +1,1302 @@
+﻿{
+    "categories":  [
+                       {
+                           "id":  "apps_bloatware",
+                           "name":  "Bloatware Apps",
+                           "icon":  "[PKG]",
+                           "description":  "Pre-installed Microsoft Store apps",
+                           "items":  [
+                                         {
+                                             "id":  "clipchamp",
+                                             "name":  "Clipchamp",
+                                             "description":  "Video editor",
+                                             "type":  "appx",
+                                             "package":  "Clipchamp.Clipchamp",
+                                             "risk":  "safe",
+                                             "reversible":  true,
+                                             "default_remove":  true,
+                                             "mode":  "both",
+                                             "notes":  "Reinstall from Store"
+                                         },
+                                         {
+                                             "id":  "bing_news",
+                                             "name":  "Bing News",
+                                             "description":  "News aggregator",
+                                             "type":  "appx",
+                                             "package":  "Microsoft.BingNews",
+                                             "risk":  "safe",
+                                             "reversible":  true,
+                                             "default_remove":  true,
+                                             "mode":  "both",
+                                             "notes":  ""
+                                         },
+                                         {
+                                             "id":  "bing_search",
+                                             "name":  "Bing Search",
+                                             "description":  "Search integration",
+                                             "type":  "appx",
+                                             "package":  "Microsoft.BingSearch",
+                                             "risk":  "safe",
+                                             "reversible":  true,
+                                             "default_remove":  true,
+                                             "mode":  "both",
+                                             "notes":  ""
+                                         },
+                                         {
+                                             "id":  "bing_weather",
+                                             "name":  "Bing Weather",
+                                             "description":  "Weather app",
+                                             "type":  "appx",
+                                             "package":  "Microsoft.BingWeather",
+                                             "risk":  "safe",
+                                             "reversible":  true,
+                                             "default_remove":  true,
+                                             "mode":  "both",
+                                             "notes":  ""
+                                         },
+                                         {
+                                             "id":  "gethelp",
+                                             "name":  "Get Help",
+                                             "description":  "Help and support app",
+                                             "type":  "appx",
+                                             "package":  "Microsoft.GetHelp",
+                                             "risk":  "safe",
+                                             "reversible":  true,
+                                             "default_remove":  true,
+                                             "mode":  "both",
+                                             "notes":  ""
+                                         },
+                                         {
+                                             "id":  "getstarted",
+                                             "name":  "Get Started",
+                                             "description":  "Tips and welcome app",
+                                             "type":  "appx",
+                                             "package":  "Microsoft.Getstarted",
+                                             "risk":  "safe",
+                                             "reversible":  true,
+                                             "default_remove":  true,
+                                             "mode":  "both",
+                                             "notes":  ""
+                                         },
+                                         {
+                                             "id":  "office_hub",
+                                             "name":  "Office Hub",
+                                             "description":  "Microsoft Office portal",
+                                             "type":  "appx",
+                                             "package":  "Microsoft.MicrosoftOfficeHub",
+                                             "risk":  "safe",
+                                             "reversible":  true,
+                                             "default_remove":  true,
+                                             "mode":  "both",
+                                             "notes":  ""
+                                         },
+                                         {
+                                             "id":  "solitaire",
+                                             "name":  "Solitaire Collection",
+                                             "description":  "Card games",
+                                             "type":  "appx",
+                                             "package":  "Microsoft.MicrosoftSolitaireCollection",
+                                             "risk":  "safe",
+                                             "reversible":  true,
+                                             "default_remove":  true,
+                                             "mode":  "both",
+                                             "notes":  ""
+                                         },
+                                         {
+                                             "id":  "sticky_notes",
+                                             "name":  "Sticky Notes",
+                                             "description":  "Desktop sticky notes",
+                                             "type":  "appx",
+                                             "package":  "Microsoft.MicrosoftStickyNotes",
+                                             "risk":  "safe",
+                                             "reversible":  true,
+                                             "default_remove":  true,
+                                             "mode":  "both",
+                                             "notes":  ""
+                                         },
+                                         {
+                                             "id":  "people",
+                                             "name":  "People",
+                                             "description":  "Contact manager",
+                                             "type":  "appx",
+                                             "package":  "Microsoft.People",
+                                             "risk":  "safe",
+                                             "reversible":  true,
+                                             "default_remove":  true,
+                                             "mode":  "both",
+                                             "notes":  ""
+                                         },
+                                         {
+                                             "id":  "power_automate",
+                                             "name":  "Power Automate",
+                                             "description":  "Workflow automation",
+                                             "type":  "appx",
+                                             "package":  "Microsoft.PowerAutomateDesktop",
+                                             "risk":  "safe",
+                                             "reversible":  true,
+                                             "default_remove":  true,
+                                             "mode":  "both",
+                                             "notes":  ""
+                                         },
+                                         {
+                                             "id":  "todos",
+                                             "name":  "Microsoft To Do",
+                                             "description":  "Task manager",
+                                             "type":  "appx",
+                                             "package":  "Microsoft.Todos",
+                                             "risk":  "safe",
+                                             "reversible":  true,
+                                             "default_remove":  true,
+                                             "mode":  "both",
+                                             "notes":  ""
+                                         },
+                                         {
+                                             "id":  "alarms",
+                                             "name":  "Alarms \u0026 Clock",
+                                             "description":  "Alarms and timer",
+                                             "type":  "appx",
+                                             "package":  "Microsoft.WindowsAlarms",
+                                             "risk":  "safe",
+                                             "reversible":  true,
+                                             "default_remove":  true,
+                                             "mode":  "both",
+                                             "notes":  ""
+                                         },
+                                         {
+                                             "id":  "camera",
+                                             "name":  "Camera",
+                                             "description":  "Camera app",
+                                             "type":  "appx",
+                                             "package":  "Microsoft.WindowsCamera",
+                                             "risk":  "safe",
+                                             "reversible":  true,
+                                             "default_remove":  true,
+                                             "mode":  "both",
+                                             "notes":  ""
+                                         },
+                                         {
+                                             "id":  "mail_calendar",
+                                             "name":  "Mail and Calendar",
+                                             "description":  "Email and calendar client",
+                                             "type":  "appx",
+                                             "package":  "microsoft.windowscommunicationsapps",
+                                             "risk":  "safe",
+                                             "reversible":  true,
+                                             "default_remove":  true,
+                                             "mode":  "both",
+                                             "notes":  ""
+                                         },
+                                         {
+                                             "id":  "feedback_hub",
+                                             "name":  "Feedback Hub",
+                                             "description":  "Windows feedback tool",
+                                             "type":  "appx",
+                                             "package":  "Microsoft.WindowsFeedbackHub",
+                                             "risk":  "safe",
+                                             "reversible":  true,
+                                             "default_remove":  true,
+                                             "mode":  "both",
+                                             "notes":  ""
+                                         },
+                                         {
+                                             "id":  "maps",
+                                             "name":  "Maps",
+                                             "description":  "Windows Maps",
+                                             "type":  "appx",
+                                             "package":  "Microsoft.WindowsMaps",
+                                             "risk":  "safe",
+                                             "reversible":  true,
+                                             "default_remove":  true,
+                                             "mode":  "both",
+                                             "notes":  ""
+                                         },
+                                         {
+                                             "id":  "sound_recorder",
+                                             "name":  "Sound Recorder",
+                                             "description":  "Audio recorder",
+                                             "type":  "appx",
+                                             "package":  "Microsoft.WindowsSoundRecorder",
+                                             "risk":  "safe",
+                                             "reversible":  true,
+                                             "default_remove":  true,
+                                             "mode":  "both",
+                                             "notes":  ""
+                                         },
+                                         {
+                                             "id":  "your_phone",
+                                             "name":  "Your Phone",
+                                             "description":  "Phone Link companion",
+                                             "type":  "appx",
+                                             "package":  "Microsoft.YourPhone",
+                                             "risk":  "safe",
+                                             "reversible":  true,
+                                             "default_remove":  true,
+                                             "mode":  "both",
+                                             "notes":  ""
+                                         },
+                                         {
+                                             "id":  "zune_music",
+                                             "name":  "Groove Music",
+                                             "description":  "Music player",
+                                             "type":  "appx",
+                                             "package":  "Microsoft.ZuneMusic",
+                                             "risk":  "safe",
+                                             "reversible":  true,
+                                             "default_remove":  true,
+                                             "mode":  "both",
+                                             "notes":  ""
+                                         },
+                                         {
+                                             "id":  "zune_video",
+                                             "name":  "Movies \u0026 TV",
+                                             "description":  "Video player",
+                                             "type":  "appx",
+                                             "package":  "Microsoft.ZuneVideo",
+                                             "risk":  "safe",
+                                             "reversible":  true,
+                                             "default_remove":  true,
+                                             "mode":  "both",
+                                             "notes":  ""
+                                         },
+                                         {
+                                             "id":  "quick_assist",
+                                             "name":  "Quick Assist",
+                                             "description":  "Remote assistance",
+                                             "type":  "appx",
+                                             "package":  "MicrosoftCorporationII.QuickAssist",
+                                             "risk":  "safe",
+                                             "reversible":  true,
+                                             "default_remove":  true,
+                                             "mode":  "both",
+                                             "notes":  ""
+                                         },
+                                         {
+                                             "id":  "family",
+                                             "name":  "Microsoft Family",
+                                             "description":  "Family safety",
+                                             "type":  "appx",
+                                             "package":  "MicrosoftCorporationII.MicrosoftFamily",
+                                             "risk":  "safe",
+                                             "reversible":  true,
+                                             "default_remove":  true,
+                                             "mode":  "both",
+                                             "notes":  ""
+                                         },
+                                         {
+                                             "id":  "paint",
+                                             "name":  "Paint",
+                                             "description":  "Classic paint app",
+                                             "type":  "appx",
+                                             "package":  "Microsoft.Paint",
+                                             "risk":  "safe",
+                                             "reversible":  true,
+                                             "default_remove":  true,
+                                             "mode":  "both",
+                                             "notes":  ""
+                                         },
+                                         {
+                                             "id":  "mspaint",
+                                             "name":  "Paint 3D",
+                                             "description":  "3D painting app",
+                                             "type":  "appx",
+                                             "package":  "Microsoft.MSPaint",
+                                             "risk":  "safe",
+                                             "reversible":  true,
+                                             "default_remove":  true,
+                                             "mode":  "both",
+                                             "notes":  ""
+                                         },
+                                         {
+                                             "id":  "onenote",
+                                             "name":  "OneNote",
+                                             "description":  "Note-taking app",
+                                             "type":  "appx",
+                                             "package":  "Microsoft.Office.OneNote",
+                                             "risk":  "safe",
+                                             "reversible":  true,
+                                             "default_remove":  true,
+                                             "mode":  "both",
+                                             "notes":  ""
+                                         },
+                                         {
+                                             "id":  "skype",
+                                             "name":  "Skype",
+                                             "description":  "Communication app",
+                                             "type":  "appx",
+                                             "package":  "Microsoft.SkypeApp",
+                                             "risk":  "safe",
+                                             "reversible":  true,
+                                             "default_remove":  true,
+                                             "mode":  "both",
+                                             "notes":  ""
+                                         },
+                                         {
+                                             "id":  "wallet",
+                                             "name":  "Wallet",
+                                             "description":  "Microsoft Wallet",
+                                             "type":  "appx",
+                                             "package":  "Microsoft.Wallet",
+                                             "risk":  "safe",
+                                             "reversible":  true,
+                                             "default_remove":  true,
+                                             "mode":  "both",
+                                             "notes":  ""
+                                         },
+                                         {
+                                             "id":  "terminal",
+                                             "name":  "Windows Terminal",
+                                             "description":  "Modern terminal",
+                                             "type":  "appx",
+                                             "package":  "Microsoft.WindowsTerminal",
+                                             "risk":  "safe",
+                                             "reversible":  true,
+                                             "default_remove":  true,
+                                             "mode":  "both",
+                                             "notes":  ""
+                                         },
+                                         {
+                                             "id":  "mixed_reality",
+                                             "name":  "Mixed Reality Portal",
+                                             "description":  "VR/AR portal",
+                                             "type":  "appx",
+                                             "package":  "Microsoft.MixedReality.Portal",
+                                             "risk":  "safe",
+                                             "reversible":  true,
+                                             "default_remove":  true,
+                                             "mode":  "both",
+                                             "notes":  ""
+                                         },
+                                         {
+                                             "id":  "3d_viewer",
+                                             "name":  "3D Viewer",
+                                             "description":  "3D model viewer",
+                                             "type":  "appx",
+                                             "package":  "Microsoft.Microsoft3DViewer",
+                                             "risk":  "safe",
+                                             "reversible":  true,
+                                             "default_remove":  true,
+                                             "mode":  "both",
+                                             "notes":  ""
+                                         },
+                                         {
+                                             "id":  "cross_device",
+                                             "name":  "Cross Device",
+                                             "description":  "Cross-device experience",
+                                             "type":  "appx",
+                                             "package":  "Microsoft.Windows.CrossDevice",
+                                             "risk":  "safe",
+                                             "reversible":  true,
+                                             "default_remove":  true,
+                                             "mode":  "both",
+                                             "notes":  ""
+                                         },
+                                         {
+                                             "id":  "start_exp",
+                                             "name":  "Start Experience",
+                                             "description":  "Start menu experience",
+                                             "type":  "appx",
+                                             "package":  "Microsoft.StartExperiencesApp",
+                                             "risk":  "safe",
+                                             "reversible":  true,
+                                             "default_remove":  true,
+                                             "mode":  "both",
+                                             "notes":  ""
+                                         },
+                                         {
+                                             "id":  "cortana",
+                                             "name":  "Cortana",
+                                             "description":  "Virtual assistant",
+                                             "type":  "appx",
+                                             "package":  "Microsoft.549981C3F5F10",
+                                             "risk":  "safe",
+                                             "reversible":  true,
+                                             "default_remove":  true,
+                                             "mode":  "both",
+                                             "notes":  ""
+                                         },
+                                         {
+                                             "id":  "dolby_access",
+                                             "name":  "Dolby Access",
+                                             "description":  "Dolby audio",
+                                             "type":  "appx",
+                                             "package":  "DolbyLaboratories.DolbyAccess",
+                                             "risk":  "safe",
+                                             "reversible":  true,
+                                             "default_remove":  true,
+                                             "mode":  "both",
+                                             "notes":  ""
+                                         },
+                                         {
+                                             "id":  "dolby_oem",
+                                             "name":  "Dolby Digital Plus",
+                                             "description":  "Dolby OEM decoder",
+                                             "type":  "appx",
+                                             "package":  "DolbyLaboratories.DolbyDigitalPlusDecoderOEM",
+                                             "risk":  "safe",
+                                             "reversible":  true,
+                                             "default_remove":  true,
+                                             "mode":  "both",
+                                             "notes":  ""
+                                         },
+                                         {
+                                             "id":  "intel_mgmt",
+                                             "name":  "Intel Management",
+                                             "description":  "Intel management status",
+                                             "type":  "appx",
+                                             "package":  "AppUp.IntelManagementandSecurityStatus",
+                                             "risk":  "safe",
+                                             "reversible":  true,
+                                             "default_remove":  true,
+                                             "mode":  "both",
+                                             "notes":  ""
+                                         },
+                                         {
+                                             "id":  "office_push",
+                                             "name":  "Office Push Notifications",
+                                             "description":  "Office notification utility",
+                                             "type":  "appx",
+                                             "package":  "Microsoft.OfficePushNotificationUtility",
+                                             "risk":  "safe",
+                                             "reversible":  true,
+                                             "default_remove":  true,
+                                             "mode":  "both",
+                                             "notes":  ""
+                                         }
+                                     ]
+                       },
+                       {
+                           "icon":  "[MS]",
+                           "description":  "Core Microsoft applications",
+                           "name":  "Microsoft Apps",
+                           "id":  "apps_microsoft",
+                           "items":  [
+                                         {
+                                             "mode":  "both",
+                                             "id":  "edge",
+                                             "type":  "files",
+                                             "reversible":  false,
+                                             "description":  "Web browser and WebView",
+                                             "notes":  "Remnants in Settings",
+                                             "name":  "Microsoft Edge",
+                                             "default_remove":  true,
+                                             "risk":  "moderate",
+                                             "paths":  [
+                                                           "Program Files (x86)\\Microsoft\\Edge",
+                                                           "Program Files (x86)\\Microsoft\\EdgeUpdate",
+                                                           "Program Files (x86)\\Microsoft\\EdgeCore",
+                                                           "Windows\\System32\\Microsoft-Edge-Webview"
+                                                       ]
+                                         },
+                                         {
+                                             "mode":  "both",
+                                             "id":  "onedrive",
+                                             "type":  "files",
+                                             "reversible":  false,
+                                             "description":  "Cloud storage setup",
+                                             "notes":  "arm64 may not have this file",
+                                             "name":  "OneDrive",
+                                             "default_remove":  true,
+                                             "risk":  "moderate",
+                                             "paths":  [
+                                                           "Windows\\System32\\OneDriveSetup.exe"
+                                                       ]
+                                         },
+                                         {
+                                             "mode":  "both",
+                                             "id":  "outlook",
+                                             "type":  "appx",
+                                             "reversible":  true,
+                                             "description":  "New Outlook for Windows",
+                                             "package":  "Microsoft.OutlookForWindows",
+                                             "notes":  "May reappear",
+                                             "name":  "Outlook (New)",
+                                             "default_remove":  true,
+                                             "risk":  "safe"
+                                         },
+                                         {
+                                             "mode":  "both",
+                                             "id":  "teams",
+                                             "type":  "appx",
+                                             "reversible":  true,
+                                             "description":  "Communication platform",
+                                             "package":  "MSTeams",
+                                             "notes":  "",
+                                             "name":  "Microsoft Teams",
+                                             "default_remove":  true,
+                                             "risk":  "safe"
+                                         },
+                                         {
+                                             "mode":  "both",
+                                             "id":  "copilot_app",
+                                             "type":  "appx",
+                                             "reversible":  true,
+                                             "description":  "AI assistant app",
+                                             "package":  "Microsoft.Copilot",
+                                             "notes":  "",
+                                             "name":  "Copilot",
+                                             "default_remove":  true,
+                                             "risk":  "safe"
+                                         },
+                                         {
+                                             "mode":  "both",
+                                             "id":  "copilot_win",
+                                             "type":  "appx",
+                                             "reversible":  true,
+                                             "description":  "Integrated Copilot",
+                                             "package":  "Microsoft.Windows.Copilot",
+                                             "notes":  "",
+                                             "name":  "Windows Copilot",
+                                             "default_remove":  true,
+                                             "risk":  "safe"
+                                         },
+                                         {
+                                             "mode":  "both",
+                                             "id":  "devhome",
+                                             "type":  "appx",
+                                             "reversible":  true,
+                                             "description":  "Developer dashboard",
+                                             "package":  "Microsoft.Windows.DevHome",
+                                             "notes":  "May reappear",
+                                             "name":  "Dev Home",
+                                             "default_remove":  true,
+                                             "risk":  "safe"
+                                         },
+                                         {
+                                             "mode":  "both",
+                                             "id":  "gaming_app",
+                                             "type":  "appx",
+                                             "reversible":  true,
+                                             "description":  "Xbox Gaming portal",
+                                             "package":  "Microsoft.GamingApp",
+                                             "notes":  "",
+                                             "name":  "Gaming App",
+                                             "default_remove":  true,
+                                             "risk":  "safe"
+                                         }
+                                     ]
+                       },
+                       {
+                           "icon":  "[XBOX]",
+                           "description":  "Xbox services and gaming overlays",
+                           "name":  "Xbox and Gaming",
+                           "id":  "apps_xbox",
+                           "items":  [
+                                         {
+                                             "mode":  "both",
+                                             "id":  "xbox_tcui",
+                                             "type":  "appx",
+                                             "reversible":  true,
+                                             "description":  "Xbox text/chat UI",
+                                             "package":  "Microsoft.Xbox.TCUI",
+                                             "notes":  "",
+                                             "name":  "Xbox TCUI",
+                                             "default_remove":  true,
+                                             "risk":  "safe"
+                                         },
+                                         {
+                                             "mode":  "both",
+                                             "id":  "xbox_app",
+                                             "type":  "appx",
+                                             "reversible":  true,
+                                             "description":  "Xbox companion",
+                                             "package":  "Microsoft.XboxApp",
+                                             "notes":  "",
+                                             "name":  "Xbox App",
+                                             "default_remove":  true,
+                                             "risk":  "safe"
+                                         },
+                                         {
+                                             "mode":  "both",
+                                             "id":  "xbox_overlay",
+                                             "type":  "appx",
+                                             "reversible":  true,
+                                             "description":  "In-game overlay",
+                                             "package":  "Microsoft.XboxGameOverlay",
+                                             "notes":  "",
+                                             "name":  "Xbox Game Overlay",
+                                             "default_remove":  true,
+                                             "risk":  "safe"
+                                         },
+                                         {
+                                             "mode":  "both",
+                                             "id":  "xbox_gaming_overlay",
+                                             "type":  "appx",
+                                             "reversible":  true,
+                                             "description":  "Game Bar",
+                                             "package":  "Microsoft.XboxGamingOverlay",
+                                             "notes":  "",
+                                             "name":  "Xbox Gaming Overlay",
+                                             "default_remove":  true,
+                                             "risk":  "safe"
+                                         },
+                                         {
+                                             "mode":  "both",
+                                             "id":  "xbox_identity",
+                                             "type":  "appx",
+                                             "reversible":  true,
+                                             "description":  "Xbox auth",
+                                             "package":  "Microsoft.XboxIdentityProvider",
+                                             "notes":  "Needed for Xbox reinstall",
+                                             "name":  "Xbox Identity Provider",
+                                             "default_remove":  true,
+                                             "risk":  "moderate"
+                                         },
+                                         {
+                                             "mode":  "both",
+                                             "id":  "xbox_speech",
+                                             "type":  "appx",
+                                             "reversible":  true,
+                                             "description":  "Game speech",
+                                             "package":  "Microsoft.XboxSpeechToTextOverlay",
+                                             "notes":  "",
+                                             "name":  "Xbox Speech to Text",
+                                             "default_remove":  true,
+                                             "risk":  "safe"
+                                         }
+                                     ]
+                       },
+                       {
+                           "icon":  "[TEL]",
+                           "description":  "Tracking, advertising, and data collection",
+                           "name":  "Telemetry and Ads",
+                           "id":  "telemetry",
+                           "items":  [
+                                         {
+                                             "mode":  "both",
+                                             "id":  "advertising_id",
+                                             "type":  "registry",
+                                             "reversible":  true,
+                                             "operations":  [
+                                                                {
+                                                                    "hive":  "zNTUSER",
+                                                                    "path":  "Software\\Microsoft\\Windows\\CurrentVersion\\AdvertisingInfo",
+                                                                    "name":  "Enabled",
+                                                                    "value":  0,
+                                                                    "type":  "REG_DWORD"
+                                                                }
+                                                            ],
+                                             "description":  "Disable advertising identifier",
+                                             "name":  "Advertising ID",
+                                             "default_remove":  true,
+                                             "risk":  "safe"
+                                         },
+                                         {
+                                             "mode":  "both",
+                                             "id":  "tailored_exp",
+                                             "type":  "registry",
+                                             "reversible":  true,
+                                             "operations":  [
+                                                                {
+                                                                    "hive":  "zNTUSER",
+                                                                    "path":  "Software\\Microsoft\\Windows\\CurrentVersion\\Privacy",
+                                                                    "name":  "TailoredExperiencesWithDiagnosticDataEnabled",
+                                                                    "value":  0,
+                                                                    "type":  "REG_DWORD"
+                                                                }
+                                                            ],
+                                             "description":  "Disable personalized tips",
+                                             "name":  "Tailored Experiences",
+                                             "default_remove":  true,
+                                             "risk":  "safe"
+                                         },
+                                         {
+                                             "mode":  "both",
+                                             "id":  "online_speech",
+                                             "type":  "registry",
+                                             "reversible":  true,
+                                             "operations":  [
+                                                                {
+                                                                    "hive":  "zNTUSER",
+                                                                    "path":  "Software\\Microsoft\\Speech_OneCore\\Settings\\OnlineSpeechPrivacy",
+                                                                    "name":  "HasAccepted",
+                                                                    "value":  0,
+                                                                    "type":  "REG_DWORD"
+                                                                }
+                                                            ],
+                                             "description":  "Disable cloud speech",
+                                             "name":  "Online Speech",
+                                             "default_remove":  true,
+                                             "risk":  "safe"
+                                         },
+                                         {
+                                             "mode":  "both",
+                                             "id":  "telemetry_policy",
+                                             "type":  "registry",
+                                             "reversible":  true,
+                                             "operations":  [
+                                                                {
+                                                                    "hive":  "zSOFTWARE",
+                                                                    "path":  "Policies\\Microsoft\\Windows\\DataCollection",
+                                                                    "name":  "AllowTelemetry",
+                                                                    "value":  0,
+                                                                    "type":  "REG_DWORD"
+                                                                }
+                                                            ],
+                                             "description":  "Disable telemetry",
+                                             "name":  "Windows Telemetry",
+                                             "default_remove":  true,
+                                             "risk":  "safe"
+                                         },
+                                         {
+                                             "mode":  "both",
+                                             "id":  "dmwappush",
+                                             "type":  "registry",
+                                             "reversible":  true,
+                                             "operations":  [
+                                                                {
+                                                                    "hive":  "zSYSTEM",
+                                                                    "path":  "ControlSet001\\Services\\dmwappushservice",
+                                                                    "name":  "Start",
+                                                                    "value":  4,
+                                                                    "type":  "REG_DWORD"
+                                                                }
+                                                            ],
+                                             "description":  "Disable WAP push",
+                                             "name":  "Push Notifications Service",
+                                             "default_remove":  true,
+                                             "risk":  "safe"
+                                         },
+                                         {
+                                             "mode":  "both",
+                                             "id":  "sponsored_apps",
+                                             "type":  "registry",
+                                             "reversible":  true,
+                                             "operations":  [
+                                                                {
+                                                                    "hive":  "zNTUSER",
+                                                                    "path":  "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+                                                                    "name":  "OemPreInstalledAppsEnabled",
+                                                                    "value":  0,
+                                                                    "type":  "REG_DWORD"
+                                                                },
+                                                                {
+                                                                    "hive":  "zNTUSER",
+                                                                    "path":  "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+                                                                    "name":  "PreInstalledAppsEnabled",
+                                                                    "value":  0,
+                                                                    "type":  "REG_DWORD"
+                                                                },
+                                                                {
+                                                                    "hive":  "zNTUSER",
+                                                                    "path":  "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+                                                                    "name":  "SilentInstalledAppsEnabled",
+                                                                    "value":  0,
+                                                                    "type":  "REG_DWORD"
+                                                                },
+                                                                {
+                                                                    "hive":  "zSOFTWARE",
+                                                                    "path":  "Policies\\Microsoft\\Windows\\CloudContent",
+                                                                    "name":  "DisableWindowsConsumerFeatures",
+                                                                    "value":  1,
+                                                                    "type":  "REG_DWORD"
+                                                                },
+                                                                {
+                                                                    "hive":  "zSOFTWARE",
+                                                                    "path":  "Policies\\Microsoft\\PushToInstall",
+                                                                    "name":  "DisablePushToInstall",
+                                                                    "value":  1,
+                                                                    "type":  "REG_DWORD"
+                                                                }
+                                                            ],
+                                             "description":  "Disable suggestions and ads",
+                                             "name":  "Sponsored Apps",
+                                             "default_remove":  true,
+                                             "risk":  "safe"
+                                         }
+                                     ]
+                       },
+                       {
+                           "icon":  "[HW]",
+                           "description":  "Skip TPM, CPU, RAM, Secure Boot checks",
+                           "name":  "Hardware Bypasses",
+                           "id":  "hw_bypass",
+                           "items":  [
+                                         {
+                                             "mode":  "both",
+                                             "id":  "bypass_tpm",
+                                             "type":  "registry",
+                                             "reversible":  true,
+                                             "operations":  [
+                                                                {
+                                                                    "hive":  "zSYSTEM",
+                                                                    "path":  "Setup\\LabConfig",
+                                                                    "name":  "BypassTPMCheck",
+                                                                    "value":  1,
+                                                                    "type":  "REG_DWORD"
+                                                                }
+                                                            ],
+                                             "description":  "Skip TPM requirement",
+                                             "name":  "TPM Bypass",
+                                             "default_remove":  true,
+                                             "risk":  "safe"
+                                         },
+                                         {
+                                             "mode":  "both",
+                                             "id":  "bypass_cpu",
+                                             "type":  "registry",
+                                             "reversible":  true,
+                                             "operations":  [
+                                                                {
+                                                                    "hive":  "zSYSTEM",
+                                                                    "path":  "Setup\\LabConfig",
+                                                                    "name":  "BypassCPUCheck",
+                                                                    "value":  1,
+                                                                    "type":  "REG_DWORD"
+                                                                }
+                                                            ],
+                                             "description":  "Skip CPU check",
+                                             "name":  "CPU Bypass",
+                                             "default_remove":  true,
+                                             "risk":  "safe"
+                                         },
+                                         {
+                                             "mode":  "both",
+                                             "id":  "bypass_ram",
+                                             "type":  "registry",
+                                             "reversible":  true,
+                                             "operations":  [
+                                                                {
+                                                                    "hive":  "zSYSTEM",
+                                                                    "path":  "Setup\\LabConfig",
+                                                                    "name":  "BypassRAMCheck",
+                                                                    "value":  1,
+                                                                    "type":  "REG_DWORD"
+                                                                }
+                                                            ],
+                                             "description":  "Skip RAM check",
+                                             "name":  "RAM Bypass",
+                                             "default_remove":  true,
+                                             "risk":  "safe"
+                                         },
+                                         {
+                                             "mode":  "both",
+                                             "id":  "bypass_secureboot",
+                                             "type":  "registry",
+                                             "reversible":  true,
+                                             "operations":  [
+                                                                {
+                                                                    "hive":  "zSYSTEM",
+                                                                    "path":  "Setup\\LabConfig",
+                                                                    "name":  "BypassSecureBootCheck",
+                                                                    "value":  1,
+                                                                    "type":  "REG_DWORD"
+                                                                }
+                                                            ],
+                                             "description":  "Skip Secure Boot",
+                                             "name":  "Secure Boot Bypass",
+                                             "default_remove":  true,
+                                             "risk":  "safe"
+                                         },
+                                         {
+                                             "mode":  "both",
+                                             "id":  "bypass_storage",
+                                             "type":  "registry",
+                                             "reversible":  true,
+                                             "operations":  [
+                                                                {
+                                                                    "hive":  "zSYSTEM",
+                                                                    "path":  "Setup\\LabConfig",
+                                                                    "name":  "BypassStorageCheck",
+                                                                    "value":  1,
+                                                                    "type":  "REG_DWORD"
+                                                                }
+                                                            ],
+                                             "description":  "Skip storage check",
+                                             "name":  "Storage Bypass",
+                                             "default_remove":  true,
+                                             "risk":  "safe"
+                                         },
+                                         {
+                                             "mode":  "both",
+                                             "id":  "bypass_upgrade",
+                                             "type":  "registry",
+                                             "reversible":  true,
+                                             "operations":  [
+                                                                {
+                                                                    "hive":  "zSYSTEM",
+                                                                    "path":  "Setup\\MoSetup",
+                                                                    "name":  "AllowUpgradesWithUnsupportedTPMOrCPU",
+                                                                    "value":  1,
+                                                                    "type":  "REG_DWORD"
+                                                                }
+                                                            ],
+                                             "description":  "Allow upgrade on unsupported HW",
+                                             "name":  "Unsupported Upgrade",
+                                             "default_remove":  true,
+                                             "risk":  "safe"
+                                         }
+                                     ]
+                       },
+                       {
+                           "icon":  "[OOBE]",
+                           "description":  "Skip MS Account and network requirements",
+                           "name":  "OOBE Bypasses",
+                           "id":  "oobe_bypass",
+                           "items":  [
+                                         {
+                                             "mode":  "both",
+                                             "id":  "bypass_nro",
+                                             "type":  "registry",
+                                             "reversible":  true,
+                                             "operations":  [
+                                                                {
+                                                                    "hive":  "zSOFTWARE",
+                                                                    "path":  "Microsoft\\Windows\\CurrentVersion\\OOBE",
+                                                                    "name":  "BypassNRO",
+                                                                    "value":  1,
+                                                                    "type":  "REG_DWORD"
+                                                                }
+                                                            ],
+                                             "description":  "Enable local account on OOBE",
+                                             "name":  "Local Account (BypassNRO)",
+                                             "default_remove":  true,
+                                             "risk":  "safe"
+                                         }
+                                     ]
+                       },
+                       {
+                           "icon":  "[OFF]",
+                           "description":  "Disable built-in Windows features",
+                           "name":  "Features to Disable",
+                           "id":  "features_disable",
+                           "items":  [
+                                         {
+                                             "mode":  "both",
+                                             "id":  "reserved_storage",
+                                             "type":  "registry",
+                                             "reversible":  true,
+                                             "operations":  [
+                                                                {
+                                                                    "hive":  "zSOFTWARE",
+                                                                    "path":  "Microsoft\\Windows\\CurrentVersion\\ReserveManager",
+                                                                    "name":  "ShippedWithReserves",
+                                                                    "value":  0,
+                                                                    "type":  "REG_DWORD"
+                                                                }
+                                                            ],
+                                             "description":  "Disable reserved storage",
+                                             "name":  "Reserved Storage",
+                                             "default_remove":  true,
+                                             "risk":  "safe"
+                                         },
+                                         {
+                                             "mode":  "both",
+                                             "id":  "bitlocker",
+                                             "type":  "registry",
+                                             "reversible":  true,
+                                             "operations":  [
+                                                                {
+                                                                    "hive":  "zSYSTEM",
+                                                                    "path":  "ControlSet001\\Control\\BitLocker",
+                                                                    "name":  "PreventDeviceEncryption",
+                                                                    "value":  1,
+                                                                    "type":  "REG_DWORD"
+                                                                }
+                                                            ],
+                                             "description":  "Prevent auto encryption",
+                                             "name":  "BitLocker Auto-Encryption",
+                                             "default_remove":  true,
+                                             "risk":  "moderate"
+                                         },
+                                         {
+                                             "mode":  "both",
+                                             "id":  "chat_icon",
+                                             "type":  "registry",
+                                             "reversible":  true,
+                                             "operations":  [
+                                                                {
+                                                                    "hive":  "zSOFTWARE",
+                                                                    "path":  "Policies\\Microsoft\\Windows\\Windows Chat",
+                                                                    "name":  "ChatIcon",
+                                                                    "value":  3,
+                                                                    "type":  "REG_DWORD"
+                                                                },
+                                                                {
+                                                                    "hive":  "zNTUSER",
+                                                                    "path":  "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+                                                                    "name":  "TaskbarMn",
+                                                                    "value":  0,
+                                                                    "type":  "REG_DWORD"
+                                                                }
+                                                            ],
+                                             "description":  "Remove chat from taskbar",
+                                             "name":  "Chat Icon",
+                                             "default_remove":  true,
+                                             "risk":  "safe"
+                                         },
+                                         {
+                                             "mode":  "both",
+                                             "id":  "copilot_disable",
+                                             "type":  "registry",
+                                             "reversible":  true,
+                                             "operations":  [
+                                                                {
+                                                                    "hive":  "zSOFTWARE",
+                                                                    "path":  "Policies\\Microsoft\\Windows\\WindowsCopilot",
+                                                                    "name":  "TurnOffWindowsCopilot",
+                                                                    "value":  1,
+                                                                    "type":  "REG_DWORD"
+                                                                }
+                                                            ],
+                                             "description":  "Disable Windows Copilot",
+                                             "name":  "Copilot Feature",
+                                             "default_remove":  true,
+                                             "risk":  "safe"
+                                         },
+                                         {
+                                             "mode":  "both",
+                                             "id":  "search_suggestions",
+                                             "type":  "registry",
+                                             "reversible":  true,
+                                             "operations":  [
+                                                                {
+                                                                    "hive":  "zSOFTWARE",
+                                                                    "path":  "Policies\\Microsoft\\Windows\\Explorer",
+                                                                    "name":  "DisableSearchBoxSuggestions",
+                                                                    "value":  1,
+                                                                    "type":  "REG_DWORD"
+                                                                }
+                                                            ],
+                                             "description":  "Disable search box suggestions",
+                                             "name":  "Search Suggestions",
+                                             "default_remove":  true,
+                                             "risk":  "safe"
+                                         },
+                                         {
+                                             "mode":  "both",
+                                             "id":  "onedrive_backup",
+                                             "type":  "registry",
+                                             "reversible":  true,
+                                             "operations":  [
+                                                                {
+                                                                    "hive":  "zSOFTWARE",
+                                                                    "path":  "Policies\\Microsoft\\Windows\\OneDrive",
+                                                                    "name":  "DisableFileSyncNGSC",
+                                                                    "value":  1,
+                                                                    "type":  "REG_DWORD"
+                                                                }
+                                                            ],
+                                             "description":  "Disable OneDrive sync",
+                                             "name":  "OneDrive Backup",
+                                             "default_remove":  true,
+                                             "risk":  "safe"
+                                         }
+                                     ]
+                       },
+                       {
+                           "icon":  "[LOCK]",
+                           "description":  "Stop removed apps from being reinstalled",
+                           "name":  "Prevent Reinstallation",
+                           "id":  "prevent_reinstall",
+                           "items":  [
+                                         {
+                                             "mode":  "both",
+                                             "id":  "prevent_outlook",
+                                             "type":  "registry",
+                                             "reversible":  true,
+                                             "operations":  [
+                                                                {
+                                                                    "hive":  "zSOFTWARE",
+                                                                    "path":  "Microsoft\\Windows\\CurrentVersion\\WindowsUpdate\\Orchestrator\\UScheduler_Oobe\\OutlookUpdate",
+                                                                    "name":  "workCompleted",
+                                                                    "value":  1,
+                                                                    "type":  "REG_DWORD"
+                                                                },
+                                                                {
+                                                                    "hive":  "zSOFTWARE",
+                                                                    "path":  "Microsoft\\Windows\\CurrentVersion\\WindowsUpdate\\Orchestrator\\UScheduler\\OutlookUpdate",
+                                                                    "name":  "workCompleted",
+                                                                    "value":  1,
+                                                                    "type":  "REG_DWORD"
+                                                                }
+                                                            ],
+                                             "description":  "Block Outlook reinstall",
+                                             "name":  "Prevent Outlook",
+                                             "default_remove":  true,
+                                             "risk":  "safe"
+                                         },
+                                         {
+                                             "mode":  "both",
+                                             "id":  "prevent_devhome",
+                                             "type":  "registry",
+                                             "reversible":  true,
+                                             "operations":  [
+                                                                {
+                                                                    "hive":  "zSOFTWARE",
+                                                                    "path":  "Microsoft\\Windows\\CurrentVersion\\WindowsUpdate\\Orchestrator\\UScheduler\\DevHomeUpdate",
+                                                                    "name":  "workCompleted",
+                                                                    "value":  1,
+                                                                    "type":  "REG_DWORD"
+                                                                }
+                                                            ],
+                                             "description":  "Block Dev Home reinstall",
+                                             "name":  "Prevent Dev Home",
+                                             "default_remove":  true,
+                                             "risk":  "safe"
+                                         },
+                                         {
+                                             "mode":  "both",
+                                             "id":  "prevent_teams",
+                                             "type":  "registry",
+                                             "reversible":  true,
+                                             "operations":  [
+                                                                {
+                                                                    "hive":  "zSOFTWARE",
+                                                                    "path":  "Policies\\Microsoft\\Teams",
+                                                                    "name":  "DisableInstallation",
+                                                                    "value":  1,
+                                                                    "type":  "REG_DWORD"
+                                                                }
+                                                            ],
+                                             "description":  "Block Teams reinstall",
+                                             "name":  "Prevent Teams",
+                                             "default_remove":  true,
+                                             "risk":  "safe"
+                                         },
+                                         {
+                                             "mode":  "both",
+                                             "id":  "prevent_new_outlook",
+                                             "type":  "registry",
+                                             "reversible":  true,
+                                             "operations":  [
+                                                                {
+                                                                    "hive":  "zSOFTWARE",
+                                                                    "path":  "Policies\\Microsoft\\Windows\\Windows Mail",
+                                                                    "name":  "PreventRun",
+                                                                    "value":  1,
+                                                                    "type":  "REG_DWORD"
+                                                                }
+                                                            ],
+                                             "description":  "Block new mail client",
+                                             "name":  "Prevent New Outlook",
+                                             "default_remove":  true,
+                                             "risk":  "safe"
+                                         }
+                                     ]
+                       },
+                       {
+                           "icon":  "[TASK]",
+                           "description":  "Remove telemetry scheduled tasks",
+                           "name":  "Scheduled Tasks",
+                           "id":  "scheduled_tasks",
+                           "items":  [
+                                         {
+                                             "mode":  "both",
+                                             "id":  "task_appraiser",
+                                             "type":  "scheduled_task",
+                                             "reversible":  false,
+                                             "description":  "Telemetry collector",
+                                             "notes":  "",
+                                             "name":  "Compatibility Appraiser",
+                                             "default_remove":  true,
+                                             "path":  "Microsoft\\Windows\\Application Experience\\Microsoft Compatibility Appraiser",
+                                             "risk":  "safe"
+                                         },
+                                         {
+                                             "mode":  "both",
+                                             "id":  "task_ceip",
+                                             "type":  "scheduled_task",
+                                             "reversible":  false,
+                                             "description":  "Customer Experience Program",
+                                             "notes":  "Removes folder",
+                                             "name":  "CEIP Tasks",
+                                             "default_remove":  true,
+                                             "path":  "Microsoft\\Windows\\Customer Experience Improvement Program",
+                                             "risk":  "safe"
+                                         },
+                                         {
+                                             "mode":  "both",
+                                             "id":  "task_programdata",
+                                             "type":  "scheduled_task",
+                                             "reversible":  false,
+                                             "description":  "App telemetry updater",
+                                             "notes":  "",
+                                             "name":  "ProgramData Updater",
+                                             "default_remove":  true,
+                                             "path":  "Microsoft\\Windows\\Application Experience\\ProgramDataUpdater",
+                                             "risk":  "safe"
+                                         },
+                                         {
+                                             "mode":  "both",
+                                             "id":  "task_chkdsk",
+                                             "type":  "scheduled_task",
+                                             "reversible":  false,
+                                             "description":  "Disk check proxy",
+                                             "notes":  "",
+                                             "name":  "Chkdsk Proxy",
+                                             "default_remove":  true,
+                                             "path":  "Microsoft\\Windows\\Chkdsk\\Proxy",
+                                             "risk":  "safe"
+                                         },
+                                         {
+                                             "mode":  "both",
+                                             "id":  "task_wer",
+                                             "type":  "scheduled_task",
+                                             "reversible":  false,
+                                             "description":  "Error reporting queue",
+                                             "notes":  "",
+                                             "name":  "Error Reporting",
+                                             "default_remove":  true,
+                                             "path":  "Microsoft\\Windows\\Windows Error Reporting\\QueueReporting",
+                                             "risk":  "safe"
+                                         }
+                                     ]
+                       },
+                       {
+                           "icon":  "[CORE]",
+                           "description":  "Aggressive removals for Core mode only (non-serviceable)",
+                           "name":  "Core Mode Extras",
+                           "id":  "core_extras",
+                           "items":  [
+                                         {
+                                             "mode":  "core_only",
+                                             "id":  "windows_defender",
+                                             "type":  "service",
+                                             "reversible":  true,
+                                             "description":  "Disable Defender services",
+                                             "notes":  "Can be re-enabled",
+                                             "name":  "Windows Defender",
+                                             "default_remove":  true,
+                                             "risk":  "dangerous"
+                                         },
+                                         {
+                                             "mode":  "core_only",
+                                             "id":  "windows_update",
+                                             "type":  "service",
+                                             "reversible":  false,
+                                             "description":  "Disable WU completely",
+                                             "notes":  "System cannot update",
+                                             "name":  "Windows Update",
+                                             "default_remove":  true,
+                                             "risk":  "dangerous"
+                                         },
+                                         {
+                                             "mode":  "core_only",
+                                             "id":  "winsxs",
+                                             "type":  "composite",
+                                             "reversible":  false,
+                                             "description":  "Remove component store",
+                                             "notes":  "Non-serviceable",
+                                             "name":  "WinSxS Component Store",
+                                             "default_remove":  true,
+                                             "risk":  "dangerous"
+                                         },
+                                         {
+                                             "mode":  "core_only",
+                                             "id":  "winre",
+                                             "type":  "files",
+                                             "reversible":  false,
+                                             "description":  "Remove WinRE",
+                                             "notes":  "No recovery",
+                                             "name":  "Recovery Environment",
+                                             "default_remove":  true,
+                                             "risk":  "dangerous",
+                                             "paths":  [
+                                                           "Windows\\System32\\Recovery"
+                                                       ]
+                                         }
+                                     ]
+                       }
+                   ],
+    "version":  "1.0.0"
+}

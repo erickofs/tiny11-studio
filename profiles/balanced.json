@@ -1,0 +1,15 @@
+{
+  "name": "Balanced",
+  "description": "Remove bloatware but keep essential apps like Camera, Calculator, Photos, Terminal",
+  "author": "erickofs",
+  "version": "1.0.0",
+  "mode": "regular",
+  "selections": {
+    "camera": false,
+    "alarms": false,
+    "terminal": false,
+    "paint": false,
+    "sound_recorder": false,
+    "sticky_notes": false
+  }
+}

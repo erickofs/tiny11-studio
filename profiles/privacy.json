@@ -1,0 +1,26 @@
+{
+  "name": "Privacy",
+  "description": "Maximum telemetry and tracking removal, keeps most apps intact",
+  "author": "erickofs",
+  "version": "1.0.0",
+  "mode": "regular",
+  "selections": {
+    "camera": false,
+    "alarms": false,
+    "terminal": false,
+    "paint": false,
+    "sound_recorder": false,
+    "sticky_notes": false,
+    "maps": false,
+    "your_phone": false,
+    "zune_music": false,
+    "zune_video": false,
+    "xbox_tcui": false,
+    "xbox_app": false,
+    "xbox_overlay": false,
+    "xbox_gaming_overlay": false,
+    "xbox_identity": false,
+    "xbox_speech": false,
+    "gaming_app": false
+  }
+}
