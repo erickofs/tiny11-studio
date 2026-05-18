@@ -1,15 +1,16 @@
 # build.ps1 - Two-stage build pipeline for tiny11 Studio
 # Stage 1: Merge all PS1 + XAML into a single script
-# Stage 2: Compile with ps2exe to .exe
+# Stage 2: (Optional) Compile with ps2exe to .exe
 
 param(
-    [switch]$SkipExe,
+    [switch]$BuildExe,
     [string]$OutputName = "tiny11-studio"
 )
 
 $ErrorActionPreference = "Stop"
 $buildDir = Join-Path $PSScriptRoot "dist"
 $mergedScript = Join-Path $buildDir "$OutputName.ps1"
+$launcherPath = Join-Path $buildDir "$OutputName.cmd"
 $exePath = Join-Path $buildDir "$OutputName.exe"
 
 Write-Host "=== tiny11 Studio Build Pipeline ===" -ForegroundColor Cyan
@@ -95,14 +96,48 @@ $merged = $header + $embeddedXaml + "`r`n" + $embeddedCatalog + "`r`n" + $langEm
 $lineCount = ($merged -split "`n").Count
 Write-Host "  Merged script: $mergedScript ($lineCount lines)" -ForegroundColor Green
 
-if ($SkipExe) {
-    Write-Host "[2/2] Skipping EXE compilation (-SkipExe)" -ForegroundColor DarkGray
+# Generate launcher .cmd for dist
+$launcherContent = @"
+@echo off
+title tiny11 Studio
+:: ============================================================
+:: tiny11-studio.cmd - Launcher with automatic UAC elevation
+:: Double-click this file to run tiny11 Studio as Administrator
+:: ============================================================
+
+:: Check for admin privileges
+net session >nul 2>&1
+if %errorlevel% neq 0 (
+    echo Requesting administrator privileges...
+    powershell -Command "Start-Process -Verb RunAs -FilePath '%~f0'"
+    exit /b
+)
+
+:: We are admin - launch the merged script
+cd /d "%~dp0"
+powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0$OutputName.ps1"
+
+:: Keep window open on error
+if %errorlevel% neq 0 (
+    echo.
+    echo [ERROR] tiny11 Studio exited with code %errorlevel%
+    pause
+)
+"@
+[System.IO.File]::WriteAllText($launcherPath, $launcherContent, [System.Text.Encoding]::ASCII)
+Write-Host "  Launcher: $launcherPath" -ForegroundColor Green
+
+if (-not $BuildExe) {
+    Write-Host "[2/2] Skipping EXE compilation (use -BuildExe to enable)" -ForegroundColor DarkGray
     Write-Host ""
-    Write-Host "Build complete! Output: $mergedScript" -ForegroundColor Green
+    Write-Host "=== Build Complete ===" -ForegroundColor Cyan
+    Write-Host "  Output: $buildDir" -ForegroundColor Green
+    Write-Host "  Run:    Double-click $OutputName.cmd or:" -ForegroundColor DarkGray
+    Write-Host "          powershell -ExecutionPolicy Bypass -File `"$mergedScript`"" -ForegroundColor DarkGray
     return
 }
 
-# Stage 2: Compile to EXE
+# Stage 2: Compile to EXE (opt-in)
 Write-Host "[2/2] Compiling to EXE..." -ForegroundColor Yellow
 
 # Check for ps2exe
@@ -133,6 +168,9 @@ Invoke-ps2exe @ps2exeParams
 if (Test-Path $exePath) {
     $size = [math]::Round((Get-Item $exePath).Length / 1MB, 1)
     Write-Host "  EXE created: $exePath ($size MB)" -ForegroundColor Green
+    Write-Host ""
+    Write-Host "  WARNING: The EXE is unsigned and may be blocked by" -ForegroundColor Yellow
+    Write-Host "  Windows Defender/SmartScreen. Use the .cmd launcher instead." -ForegroundColor Yellow
 } else {
     Write-Host "  EXE compilation failed!" -ForegroundColor Red
 }

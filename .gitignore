@@ -1,6 +1,7 @@
 # Build artifacts
 build/
 release/
+dist/
 *.exe
 
 # PowerShell
