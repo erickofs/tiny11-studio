@@ -128,12 +128,21 @@ if %errorlevel% neq 0 (
 Write-Host "  Launcher: $launcherPath" -ForegroundColor Green
 
 if (-not $BuildExe) {
-    Write-Host "[2/2] Skipping EXE compilation (use -BuildExe to enable)" -ForegroundColor DarkGray
+    # Generate release ZIP
+    Write-Host ""
+    Write-Host "  Packaging release ZIP..." -ForegroundColor Yellow
+    $zipPath = Join-Path $buildDir "$OutputName.zip"
+    if (Test-Path $zipPath) { Remove-Item $zipPath -Force }
+    Compress-Archive -Path $mergedScript, $launcherPath -DestinationPath $zipPath
+    Write-Host "  Release ZIP created: $zipPath" -ForegroundColor Green
+
     Write-Host ""
     Write-Host "=== Build Complete ===" -ForegroundColor Cyan
     Write-Host "  Output: $buildDir" -ForegroundColor Green
     Write-Host "  Run:    Double-click $OutputName.cmd or:" -ForegroundColor DarkGray
-    Write-Host "          powershell -ExecutionPolicy Bypass -File `"$mergedScript`"" -ForegroundColor DarkGray
+    Write-Host "          powershell -ExecutionPolicy Bypass -File `"$OutputName.ps1`"" -ForegroundColor DarkGray
+    Write-Host ""
+    Write-Host "  For GitHub Releases, upload: $zipPath" -ForegroundColor Green
     return
 }
 

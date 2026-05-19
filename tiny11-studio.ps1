@@ -1,4 +1,4 @@
-﻿# tiny11-studio.ps1 - Main entry point for tiny11 Studio
+# tiny11-studio.ps1 - Main entry point for tiny11 Studio
 # Modular Windows 11 Image Builder GUI
 
 #Requires -Version 5.1
@@ -51,7 +51,16 @@ $c = @{}
     'txtPhase','txtPercent','progressBar','txtLog',
     'btnStartBuild','btnCancelBuild','btnOpenFolder',
     'btnCloneGithub','btnUseLocal','txtSubmoduleStatus',
-    'btnBack','btnNext','navBar'
+    'btnBack','btnNext','navBar',
+    'lblSubmoduleNotFound','lblSubmoduleDesc','lblStep1Title','lblStep1Desc',
+    'lblStep1Iso','lblStep1Edition','lblStep1Scratch','lblStep1Output',
+    'lblStep2Title','lblStep2Desc','lblStep2Regular','lblStep2RegularSub',
+    'lblStep2RegularDesc','lblStep2RegularRec','lblStep2Core','lblStep2CoreSub',
+    'lblStep2CoreDesc','lblStep2CoreWarning',
+    'lblStep3Title','lblStep3Desc','lblStep3Standard','lblStep3StandardDesc',
+    'lblStep3Custom','lblStep3CustomDesc',
+    'lblStep4Title','lblStep4Desc','lblStep4SummarySource','lblStep4SummaryMode',
+    'lblStep4SummaryOutput','lblStep4SummaryCount'
 ) | ForEach-Object { $c[$_] = $window.FindName($_) }
 
 # --- Helpers ---
@@ -161,9 +170,9 @@ function Build-ItemsForCategory([string]$CategoryId) {
         $badge.VerticalAlignment = "Center"
         $bt = New-Object System.Windows.Controls.TextBlock; $bt.FontSize = 10
         switch ($item.risk) {
-            "safe"      { $badge.Background = $bc.ConvertFrom("#2d4a2d"); $bt.Foreground = $bc.ConvertFrom("#a6e3a1"); $bt.Text = "Safe" }
-            "moderate"  { $badge.Background = $bc.ConvertFrom("#4a4a2d"); $bt.Foreground = $bc.ConvertFrom("#f9e2af"); $bt.Text = "Moderate" }
-            "dangerous" { $badge.Background = $bc.ConvertFrom("#4a2d2d"); $bt.Foreground = $bc.ConvertFrom("#f38ba8"); $bt.Text = "Dangerous" }
+            "safe"      { $badge.Background = $bc.ConvertFrom("#2d4a2d"); $bt.Foreground = $bc.ConvertFrom("#a6e3a1"); $bt.Text = Get-String "risk.safe" }
+            "moderate"  { $badge.Background = $bc.ConvertFrom("#4a4a2d"); $bt.Foreground = $bc.ConvertFrom("#f9e2af"); $bt.Text = Get-String "risk.moderate" }
+            "dangerous" { $badge.Background = $bc.ConvertFrom("#4a2d2d"); $bt.Foreground = $bc.ConvertFrom("#f38ba8"); $bt.Text = Get-String "risk.dangerous" }
         }
         $badge.Child = $bt
 
@@ -177,7 +186,7 @@ function Build-ItemsForCategory([string]$CategoryId) {
 
 function Update-ItemCount {
     $rem = ($script:selections.Values | Where-Object { $_ }).Count
-    $c.txtItemCount.Text = "$rem of $($script:selections.Count) items selected for removal"
+    $c.txtItemCount.Text = Get-String "step3.items_selected" -Args @($rem)
 }
 
 function Add-Log([string]$msg) {
@@ -189,6 +198,60 @@ $languages = Get-AvailableLanguages
 foreach ($lang in $languages) { $c.cmbLanguage.Items.Add($lang.Name) | Out-Null }
 $li = switch (Get-CurrentLanguage) { "en" { 0 } "pt-br" { 1 } "es" { 2 } default { 0 } }
 if ($li -lt $c.cmbLanguage.Items.Count) { $c.cmbLanguage.SelectedIndex = $li }
+
+function Update-UIStrings {
+    if ($c.txtTitle) { $c.txtTitle.Text = Get-String "app.title" }
+    if ($c.txtSubtitle) { $c.txtSubtitle.Text = Get-String "app.subtitle" }
+    if ($c.lblStep1Title) { $c.lblStep1Title.Text = Get-String "step1.title" }
+    if ($c.lblStep1Iso) { $c.lblStep1Iso.Text = Get-String "step1.iso_label" }
+    if ($c.btnBrowseIso) { $c.btnBrowseIso.Content = Get-String "step1.browse" }
+    if ($c.btnBrowseScratch) { $c.btnBrowseScratch.Content = Get-String "step1.browse" }
+    if ($c.btnBrowseOutput) { $c.btnBrowseOutput.Content = Get-String "step1.browse" }
+    if ($c.lblStep1Edition) { $c.lblStep1Edition.Text = Get-String "step1.edition" }
+    if ($c.lblStep1Scratch) { $c.lblStep1Scratch.Text = Get-String "step1.scratch" }
+    if ($c.lblStep1Output) { $c.lblStep1Output.Text = Get-String "step1.output" }
+    
+    if ($c.lblStep2Title) { $c.lblStep2Title.Text = Get-String "step2.title" }
+    if ($c.lblStep2Regular) { $c.lblStep2Regular.Text = Get-String "step2.regular" }
+    if ($c.lblStep2RegularDesc) { $c.lblStep2RegularDesc.Text = Get-String "step2.regular_desc" }
+    if ($c.lblStep2Core) { $c.lblStep2Core.Text = Get-String "step2.core" }
+    if ($c.lblStep2CoreDesc) { $c.lblStep2CoreDesc.Text = Get-String "step2.core_desc" }
+    if ($c.lblStep2CoreWarning) { $c.lblStep2CoreWarning.Text = Get-String "step2.core_warning" }
+    
+    if ($c.lblStep3Title) { $c.lblStep3Title.Text = Get-String "step3.title" }
+    if ($c.lblStep3Standard) { $c.lblStep3Standard.Text = Get-String "step3.standard" }
+    if ($c.lblStep3StandardDesc) { $c.lblStep3StandardDesc.Text = Get-String "step3.standard_desc" }
+    if ($c.lblStep3Custom) { $c.lblStep3Custom.Text = Get-String "step3.custom" }
+    if ($c.lblStep3CustomDesc) { $c.lblStep3CustomDesc.Text = Get-String "step3.custom_desc" }
+    if ($c.btnSelectAll) { $c.btnSelectAll.Content = Get-String "step3.select_all" }
+    if ($c.btnDeselectAll) { $c.btnDeselectAll.Content = Get-String "step3.deselect_all" }
+    if ($c.btnLoadProfile) { $c.btnLoadProfile.Content = Get-String "step3.load_profile" }
+    if ($c.btnSaveProfile) { $c.btnSaveProfile.Content = Get-String "step3.save_profile" }
+    Update-ItemCount
+    
+    if ($c.lblStep4Title) { $c.lblStep4Title.Text = Get-String "step4.title" }
+    if ($c.btnStartBuild) { $c.btnStartBuild.Content = Get-String "step4.start" }
+    if ($c.btnCancelBuild) { $c.btnCancelBuild.Content = Get-String "step4.cancel" }
+    if ($c.btnOpenFolder) { $c.btnOpenFolder.Content = Get-String "step4.open_folder" }
+    
+    if ($c.lblSubmoduleNotFound) { $c.lblSubmoduleNotFound.Text = Get-String "submodule.not_found" }
+    if ($c.btnCloneGithub) { $c.btnCloneGithub.Content = Get-String "submodule.clone" }
+    if ($c.btnUseLocal) { $c.btnUseLocal.Content = Get-String "submodule.local" }
+    
+    if ($c.btnNext) { $c.btnNext.Content = Get-String "common.next" }
+    if ($c.btnBack) { $c.btnBack.Content = Get-String "common.back" }
+    
+    $sel = $c.lstCategories.SelectedItem; if ($sel) { Build-ItemsForCategory $sel.Tag }
+}
+
+$c.cmbLanguage.Add_SelectionChanged({
+    $idx = $c.cmbLanguage.SelectedIndex
+    if ($idx -ge 0 -and $idx -lt $languages.Count) {
+        $code = $languages[$idx].Code
+        Set-Language -Code $code
+        Update-UIStrings
+    }
+})
 
 # --- Navigation ---
 $c.btnNext.Add_Click({
@@ -291,6 +354,7 @@ $c.btnUseLocal.Add_Click({
 
 # --- Init ---
 $c.txtScratchDir.Text = $PSScriptRoot
+Update-UIStrings
 if (Test-SubmodulePresent) { $c.submodulePanel.Visibility = "Collapsed"; Show-Step 1 }
 else { $c.step1Panel.Visibility = "Collapsed"; $c.submodulePanel.Visibility = "Visible"; $c.btnNext.IsEnabled = $false; $c.navBar.Visibility = "Collapsed" }
 
